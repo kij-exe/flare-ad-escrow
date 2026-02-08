@@ -36,6 +36,12 @@ export function Navbar() {
                             >
                                 Dashboard
                             </Link>
+                            <Link
+                                href="/keeper"
+                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                            >
+                                Keeper
+                            </Link>
                         </div>
                     </div>
                     <ConnectButton
