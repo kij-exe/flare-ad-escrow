@@ -125,7 +125,15 @@ export async function retrieveDataAndProofBase(url: string, abiEncodedRequest: s
     await sleep(10000);
     let proof = await postRequestToDALayer(url, request, true);
     console.log("Waiting for the DA Layer to generate the proof...");
+    let attempts = 0;
+    const maxAttempts = 30; // 5 minutes max
     while (proof.response_hex === undefined) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+            console.log("DA Layer response after timeout:", JSON.stringify(proof), "\n");
+            throw new Error(`DA Layer did not return proof after ${maxAttempts} attempts`);
+        }
+        console.log(`  DA Layer attempt ${attempts}/${maxAttempts}...`);
         await sleep(10000);
         proof = await postRequestToDALayer(url, request, false);
     }

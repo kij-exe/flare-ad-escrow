@@ -85,7 +85,7 @@ export default function OrderDetail() {
         args: [BigInt(dealId)],
     });
 
-    const { data: linearConfig } = useReadContract({
+    const { data: linearConfig, refetch: refetchLinearConfig } = useReadContract({
         address: TRUSTTUBE_ADDRESS as `0x${string}`,
         abi: TRUSTTUBE_ABI,
         functionName: "getLinearConfig",
@@ -103,11 +103,20 @@ export default function OrderDetail() {
     // Refetch all data once tx is confirmed on-chain
     useEffect(() => {
         if (isConfirmed) {
-            refetchDeal();
-            refetchMilestones();
+            refetchAll();
             fetchApplications();
         }
     }, [isConfirmed]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Auto-refresh for Active deals (every 60s to avoid rate limits)
+    const isActive = deal ? Number(deal.status) === 3 : false;
+    useEffect(() => {
+        if (!isActive) return;
+        const interval = setInterval(() => {
+            refetchAll();
+        }, 60000);
+        return () => clearInterval(interval);
+    }, [isActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (!deal) {
         return (
@@ -142,6 +151,7 @@ export default function OrderDetail() {
     const refetchAll = () => {
         refetchDeal();
         refetchMilestones();
+        refetchLinearConfig();
     };
 
     // Calculate total payout
@@ -978,7 +988,15 @@ export default function OrderDetail() {
 
                             {/* Verified views */}
                             <div className="rounded-[6px] bg-[#f6f6f6] p-[1rem]">
-                                <span className="text-[0.7rem] text-[#a0a0a0]">Verified Views</span>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[0.7rem] text-[#a0a0a0]">Verified Views</span>
+                                    <button
+                                        onClick={() => { refetchDeal(); refetchMilestones(); }}
+                                        className="text-[0.7rem] text-[#a0a0a0] hover:text-[#E62058] transition-colors"
+                                    >
+                                        Refresh
+                                    </button>
+                                </div>
                                 <p className="mt-[0.3rem] text-[2rem] font-bold text-[#232323]">
                                     {Number(deal.lastVerifiedViews).toLocaleString()}
                                 </p>
@@ -1072,7 +1090,15 @@ export default function OrderDetail() {
                                 This deal is active. View counts are verified on-chain every 5 minutes via Flare&apos;s FDC protocol.
                             </p>
                             <div className="rounded-[6px] bg-[#f6f6f6] p-[1rem]">
-                                <span className="text-[0.7rem] text-[#a0a0a0]">Verified Views</span>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[0.7rem] text-[#a0a0a0]">Verified Views</span>
+                                    <button
+                                        onClick={() => { refetchDeal(); refetchMilestones(); }}
+                                        className="text-[0.7rem] text-[#a0a0a0] hover:text-[#E62058] transition-colors"
+                                    >
+                                        Refresh
+                                    </button>
+                                </div>
                                 <p className="mt-[0.3rem] text-[2rem] font-bold text-[#232323]">
                                     {Number(deal.lastVerifiedViews).toLocaleString()}
                                 </p>

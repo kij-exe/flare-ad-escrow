@@ -104,6 +104,7 @@ function startViewCountCheck(trustTube: any, dealId: number, deal: any): string 
             finishCheck(check);
         })
         .catch((error) => {
+            console.error(`[server] View check failed for deal #${dealId}:`, error.message || error);
             check.status = "failed";
             check.error = error.message || String(error);
             check.completedAt = Date.now();
@@ -142,6 +143,7 @@ function startEtagCheck(trustTube: any, dealId: number, deal: any): string | nul
             finishCheck(check);
         })
         .catch((error) => {
+            console.error(`[server] Etag check failed for deal #${dealId}:`, error.message || error);
             check.status = "failed";
             check.error = error.message || String(error);
             check.completedAt = Date.now();

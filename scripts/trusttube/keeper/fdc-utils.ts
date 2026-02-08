@@ -95,7 +95,7 @@ export async function submitAndRetrieveProof(requestBody: any) {
 
     // Step 3: Wait for finalization and retrieve proof from DA Layer
     const daLayerUrl = `${COSTON2_DA_LAYER_URL}/api/v1/fdc/proof-by-request-round-raw`;
-    console.log("Retrieving proof from DA Layer...\n");
+    console.log(`Retrieving proof from DA Layer (${daLayerUrl})...\n`);
     const proof = await retrieveDataAndProofBase(daLayerUrl, abiEncodedRequest, roundId);
     console.log("Proof retrieved successfully.\n");
 
