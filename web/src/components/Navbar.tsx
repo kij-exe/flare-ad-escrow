@@ -13,9 +13,7 @@ export function Navbar() {
                 <div className="flex h-[4rem] items-center justify-between">
                     <div className="flex items-center gap-[2.4rem]">
                         <Link href="/" className="flex items-center gap-[0.6rem]">
-                            <div className="h-[2rem] w-[2rem] rounded-[6px] bg-[#E62058] flex items-center justify-center">
-                                <span className="text-[0.7rem] font-bold text-white">TT</span>
-                            </div>
+                            <img src="/favicon.ico" alt="TrustTube" className="h-[2rem] w-[2rem]" />
                             <span className="text-[1.1rem] font-bold text-[#232323]">
                                 TrustTube
                             </span>

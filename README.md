@@ -1,134 +1,98 @@
-<p align="center">
-  <a href="https://flare.network/" target="blank"><img src="https://content.flare.network/Flare-2.svg" width="400" height="300" alt="Flare Logo" /></a>
-</p>
+# TrustTube
 
-# Flare Hardhat Starter Kit
+Auditable smart contracts, not agencies. Guaranteed payouts for creators, verified performance for brands.
 
-This is a starter kit for interacting with Flare blockchain.
-It provides example code for interacting with enshrined Flare protocol, and useful deployed contracts.
-It also demonstrates, how the official Flare smart contract periphery [package](https://www.npmjs.com/package/@flarenetwork/flare-periphery-contracts) can be used in your projects.
+TrustTube is a decentralized YouTube sponsorship escrow platform built on [Flare Network](https://flare.network). It replaces the trust-based middlemen of influencer marketing with transparent, auditable smart contracts. Brands deposit stablecoins into escrow, YouTube view counts are verified on-chain via Flare's Data Connector (FDC), and creators get paid automatically when milestones are hit.
 
-## Getting started
+## How It Works
 
-If you are new to Hardhat please check the [Hardhat getting started doc](https://hardhat.org/hardhat-runner/docs/getting-started#overview)
+1. **Brand creates a sponsorship order** -- defines milestones (e.g. 100K views = $500, 1M views = $5,000) or a linear pay-per-view rate, and specifies deadlines.
+2. **Creator accepts and produces the video** -- picks up the order from the marketplace and uploads the sponsored content to YouTube.
+3. **Brand reviews and funds the escrow** -- after reviewing the video, approves it. USDC is locked in the smart contract.
+4. **Views are verified, payments released** -- the keeper service uses Flare's FDC to cryptographically prove YouTube view counts on-chain. Milestones unlock automatically as targets are hit. If the creator swaps or edits the video, tampering is detected via etag monitoring and remaining funds return to the brand.
 
-1. Clone and install dependencies:
+## Project Structure
 
-    ```console
-    git clone https://github.com/flare-foundation/flare-hardhat-starter.git
-    cd flare-hardhat-starter
-    ```
+| Component | Path | Description |
+|-----------|------|-------------|
+| Smart Contracts | `contracts/trusttube/` | TrustTube escrow contract and MockUSDC test token (Solidity 0.8.25) |
+| Keeper Service | `scripts/trusttube/keeper/` | Off-chain bot that fetches YouTube data, obtains FDC proofs, and updates view counts on-chain. Runs as CLI or HTTP server with SSE. |
+| Frontend | `web/` | Next.js marketplace app for brands and creators (wagmi, RainbowKit, Tailwind, Supabase) |
+| YouTube Proxy | `worker/` | Cloudflare Worker that proxies YouTube Data API v3 for FDC verifiers |
+| Deployment | `scripts/trusttube/deploy.ts` | Hardhat deploy script, saves addresses to `deployments/` |
+| Database | `supabase/migrations/` | PostgreSQL schema for deal applications and YouTube OAuth tokens |
 
-    and then run:
+## Smart Contracts
 
-    ```console
-    yarn
-    ```
+Deployed to Coston2 (Flare testnet, Chain ID 114).
 
-    or
+**TrustTube** is the main contract. It manages the full deal lifecycle: brands create orders with milestone or linear payment terms, creators accept and submit YouTube videos, brands approve and deposit USDC into escrow, a keeper updates FDC-verified view counts, and creators claim payouts as targets are reached. The contract also handles tamper detection (if a video's etag changes, the deal terminates and remaining funds return to the brand) and deadline-based fund reclamation for missed milestones.
 
-    ```console
-    npm install --force
-    ```
+**MockUSDC** is a standard ERC20 (6 decimals) used as the payment token during testing.
 
-2. Set up `.env` file
-
-    ```console
-    cp .env.example .env
-    ```
-
-3. Change the `PRIVATE_KEY` in the `.env` file to yours
-
-4. Compile the project
-
-    ```console
-    yarn hardhat compile
-    ```
-
-    or
-
-    ```console
-    npx hardhat compile
-    ```
-
-    This will compile all `.sol` files in your `/contracts` folder.
-    It will also generate artifacts that will be needed for testing.
-    Contracts `Imports.sol` import MockContracts and Flare related mocks, thus enabling mocking of the contracts from typescript.
-
-5. Run Tests
-
-    ```console
-    yarn hardhat test
-    ```
-
-    or
-
-    ```console
-    npx hardhat test
-    ```
-
-6. Deploy
-
-    Check the `hardhat.config.ts` file, where you define which networks you want to interact with.
-    Flare mainnet & test network details are already added in that file.
-
-    Make sure that you have added API Keys in the `.env` file
-
-    ```console
-    npx hardhat run scripts/tryDeployment.ts
-    ```
-
-## Repository structure
+### Deal Lifecycle
 
 ```
-├── contracts: Solidity smart contracts
-├── scripts: Typescript scripts that interact with the blockchain
-├── test
-├── hardhat.config.ts
-├── package.json
-├── README.md
-├── tsconfig.json
-└── yarn.lock
+Open --> InProgress --> InReview --> Active --> Completed
+                                       |
+                                       +--> Terminated (tampering)
 ```
 
-## Contributing
+### Payment Modes
 
-Before opening a pull request, lint and format the code.
-You can do that by running the following commands.
+- **Milestone** -- discrete payouts at specific view count targets, each with its own deadline. E.g. $500 at 100K views, $5,000 at 1M views.
+- **Linear** -- continuous pay-per-view up to a total cap. E.g. $0.005/view up to $10,000.
 
-```sh
-yarn format:fix
+## Flare Data Connector (FDC) Integration
+
+The FDC is the core trust mechanism. Instead of relying on an oracle operator, TrustTube uses Flare's decentralized attestation protocol to cryptographically prove YouTube data on-chain.
+
+The pipeline works as follows: the keeper builds a `Web2Json` attestation request pointing to our Cloudflare Worker (which proxies the YouTube API), submits it to the FDC Hub, where a network of independent verifiers each query the URL and vote on the response. After consensus, the keeper retrieves a Merkle proof from the DA Layer and calls `updateViews()` on the contract. The contract verifies the proof via `ContractRegistry.getFdcVerification().verifyWeb2Json()`, decodes the ABI-encoded response, validates the video ID, and updates the on-chain view count.
+
+Two types of proofs are used:
+
+- **View Count** -- proves the current view count (`ViewCountDTO{videoId, viewCount}`). Drives milestone and linear payouts.
+- **Etag** -- proves the current video etag (`EtagDTO{videoId, etag}`). If it differs from the stored hash, the video was tampered with and the deal terminates.
+
+## Keeper Service
+
+The keeper is the off-chain bot that bridges YouTube data to the smart contract via FDC. It polls active deals every 5 minutes, checks if view counts increased, and if so runs the full FDC attestation pipeline (prepare request, submit to hub, wait for round finalization, retrieve proof, call contract). Every ~30 minutes it also checks etags for tampering.
+
+Two modes are available:
+- **CLI** (`keeper/index.ts`) -- auto-polls in a loop, logs to console.
+- **HTTP Server** (`keeper/server.ts`) -- exposes a REST API and SSE stream for the frontend keeper dashboard. Supports manual triggers, config changes, and real-time monitoring.
+
+## Frontend Marketplace
+
+A Next.js web app serving as the marketplace for both brands and creators.
+
+- **Marketplace** -- browse all open sponsorship orders with status, payment mode, and budget.
+- **Order Creation** -- brands configure milestone targets or linear rates, set deadlines, and submit on-chain.
+- **Order Detail** -- the full lifecycle UI: creators apply, submit videos (with YouTube OAuth upload), and claim payouts. Brands review applications, accept creators, approve videos, and monitor progress.
+- **Dashboard** -- personal view of the user's active deals and payment progress.
+- **Keeper Dashboard** -- real-time monitoring of FDC checks with step-by-step progress indicators, transaction links, and configuration controls. Connects to the keeper server via SSE.
+
+Off-chain data (deal applications, YouTube OAuth tokens) is stored in Supabase PostgreSQL.
+
+## Deployment
+
+```bash
+# Deploy contracts to Coston2
+yarn hardhat run scripts/trusttube/deploy.ts --network coston2
+
+# Run keeper (CLI or HTTP server)
+yarn hardhat run scripts/trusttube/keeper/index.ts --network coston2
+yarn hardhat run scripts/trusttube/keeper/server.ts --network coston2
+
+# Run frontend
+cd web && yarn install && yarn dev
+
+# Deploy YouTube proxy worker
+cd worker && npx wrangler secret put YOUTUBE_API_KEY && npx wrangler deploy
 ```
 
-```sh
-yarn lint:fix
-```
+See `.env.example` for required environment variables (contract addresses, FDC endpoints, Supabase keys, Google OAuth client ID, etc.).
 
-## Clean repository
+## Network
 
-If you want to start building your projects from a repository that is already setup to work with Flare correctly, but you do not want to keep any of the examples, these are the files you should delete:
-
-- all files in the `contracts/` folder
-- all files in the `scripts/` folder, except for the `scripts/fdcExample/Base.ts` which might come in useful
-
-A shell command that does this is:
-
-```sh
-rm -rf contracts/* & mv scripts/fdcExample/Base.ts ./Base.ts & rm -rf scripts/* & mv ./Base.ts scripts/Base.ts
-```
-
-## Patches
-
-This project uses `patch-package` to fix an upstream bug in `@openzeppelin/upgrades-core@1.44.2`.
-
-**Issue:** When `ethereum-cryptography` v3.x is installed, `ethereumjs-util`'s `keccak256` returns a `Uint8Array` instead of a `Buffer`. The OpenZeppelin code calls `.toString('hex')` expecting a Buffer, but `Uint8Array.toString()` ignores the encoding argument and returns comma-separated decimals (e.g., `54,8,148,...`) instead of a hex string. This breaks contract verification and proxy detection.
-
-**Fix:** The patch wraps `keccak256()` results with `Buffer.from()` before calling `.toString('hex')`. It's automatically applied on `yarn install` via the postinstall script.
-
-Once OpenZeppelin releases a fix upstream, this patch can be removed.
-
-## Resources
-
-- [Flare Developer Hub](https://dev.flare.network/)
-- [Hardhat Guides](https://dev.flare.network/fdc/guides/hardhat)
-- [Hardhat Docs](https://hardhat.org/docs)
+TrustTube is deployed on **Coston2** (Flare testnet, Chain ID 114). The hardhat config also supports Coston, Songbird, and Flare mainnet.

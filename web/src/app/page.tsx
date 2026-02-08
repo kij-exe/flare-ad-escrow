@@ -73,7 +73,7 @@ export default function Home() {
         <div className="flex flex-col items-center">
             {/* Hero Section */}
             <div className="relative w-full max-w-[900px] py-[4.8rem] text-center">
-                <div className="mb-[1.2rem] inline-flex items-center rounded-full border border-[#c4c4c4] bg-white px-[1rem] py-[0.4rem] text-[0.7rem] font-medium text-[#777]">
+                <div className="mb-[1.2rem] inline-flex items-center rounded-full border border-[#c4c4c4] bg-white px-[1rem] py-[0.4rem] text-[0.85rem] font-medium text-[#777]">
                     <span className="mr-[0.5rem] inline-block h-[0.4rem] w-[0.4rem] rounded-full bg-emerald-500" />
                     Powered by Flare Network
                 </div>
