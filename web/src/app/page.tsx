@@ -7,7 +7,7 @@ const features = [
             "Funds are locked in audited smart contracts on Flare. Neither party can rug -- payments release only when milestones are met.",
         icon: (
             <svg
-                className="h-6 w-6"
+                className="h-[1.4rem] w-[1.4rem]"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
@@ -27,7 +27,7 @@ const features = [
             "YouTube view counts are verified on-chain using Flare's Data Connector (FDC). No trust assumptions -- pure cryptographic proof.",
         icon: (
             <svg
-                className="h-6 w-6"
+                className="h-[1.4rem] w-[1.4rem]"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
@@ -52,7 +52,7 @@ const features = [
             "Video changes are detected automatically via etag monitoring. If a creator swaps the sponsored content, funds return to the client.",
         icon: (
             <svg
-                className="h-6 w-6"
+                className="h-[1.4rem] w-[1.4rem]"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
@@ -72,37 +72,34 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center">
             {/* Hero Section */}
-            <div className="relative w-full max-w-4xl py-20 text-center">
-                {/* Gradient glow effect */}
-                <div className="absolute inset-0 -z-10 mx-auto h-64 w-64 rounded-full bg-blue-600/20 blur-[120px]" />
-
-                <div className="mb-4 inline-flex items-center rounded-full border border-zinc-800 bg-zinc-900 px-4 py-1.5 text-sm text-zinc-400">
-                    <span className="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-500" />
+            <div className="relative w-full max-w-[900px] py-[4.8rem] text-center">
+                <div className="mb-[1.2rem] inline-flex items-center rounded-full border border-[#c4c4c4] bg-white px-[1rem] py-[0.4rem] text-[0.7rem] font-medium text-[#777]">
+                    <span className="mr-[0.5rem] inline-block h-[0.4rem] w-[0.4rem] rounded-full bg-emerald-500" />
                     Powered by Flare Network
                 </div>
 
-                <h1 className="mb-2 text-5xl font-bold tracking-tight text-zinc-50 sm:text-6xl">
+                <h1 className="mb-[0.6rem] text-[4rem] leading-[4rem] font-bold tracking-[0.02em] text-[#232323] sm:text-[5rem] sm:leading-[5rem]">
                     TrustTube
                 </h1>
-                <p className="mb-4 text-xl font-medium text-blue-400 sm:text-2xl">
+                <p className="mb-[1rem] text-[1.4rem] leading-[1.8rem] font-medium text-[#E62058]">
                     Decentralized YouTube Sponsorships
                 </p>
-                <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-zinc-400">
+                <p className="mx-auto mb-[2.4rem] max-w-[600px] text-[0.95rem] leading-[1.5rem] text-[#777]">
                     Connect creators with clients for trustless video sponsorship
                     deals. Milestones verified on-chain using Flare&apos;s FDC
                     protocol. No middlemen.
                 </p>
 
-                <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <div className="flex flex-col items-center justify-center gap-[0.8rem] sm:flex-row">
                     <Link
                         href="/marketplace"
-                        className="inline-flex h-12 items-center justify-center rounded-lg bg-blue-600 px-8 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-zinc-950"
+                        className="inline-flex h-[3rem] items-center justify-center rounded-[10px] bg-[#E62058] px-[2rem] text-[0.8rem] font-bold text-white transition-all hover:bg-[#c10f45] active:scale-95 duration-200 focus:outline-none focus:ring-2 focus:ring-[#E62058] focus:ring-offset-2"
                     >
                         Browse Marketplace
                     </Link>
                     <Link
                         href="/create-order"
-                        className="inline-flex h-12 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 px-8 text-sm font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-zinc-950"
+                        className="inline-flex h-[3rem] items-center justify-center rounded-[10px] border border-[#232323] bg-white px-[2rem] text-[0.8rem] font-bold text-[#232323] transition-all hover:bg-[#f6f6f6] active:scale-95 duration-200 focus:outline-none focus:ring-2 focus:ring-[#232323] focus:ring-offset-2"
                     >
                         Create an Order
                     </Link>
@@ -110,27 +107,27 @@ export default function Home() {
             </div>
 
             {/* Features Section */}
-            <div className="w-full max-w-5xl py-16">
-                <h2 className="mb-2 text-center text-sm font-semibold uppercase tracking-wider text-blue-400">
+            <div className="w-full py-[4.4rem]">
+                <h2 className="mb-[0.6rem] text-center text-[0.7rem] font-bold uppercase tracking-[0.1em] text-[#E62058]">
                     How It Works
                 </h2>
-                <p className="mb-12 text-center text-2xl font-bold text-zinc-100">
+                <p className="mb-[2.4rem] text-center text-[2rem] leading-[2.4rem] font-bold text-[#232323]">
                     Trustless sponsorships, from start to finish
                 </p>
 
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div className="grid grid-cols-1 gap-[1.2rem] md:grid-cols-3">
                     {features.map((feature) => (
                         <div
                             key={feature.title}
-                            className="group rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 transition-all hover:border-zinc-700 hover:bg-zinc-900"
+                            className="group rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem] transition-all duration-300 hover:border-[#a0a0a0] hover:shadow-lg hover:shadow-[#E62058]/5 hover:-translate-y-[10px]"
                         >
-                            <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600/10 text-blue-400">
+                            <div className="mb-[1rem] inline-flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-[6px] bg-[#fff1f3] text-[#E62058]">
                                 {feature.icon}
                             </div>
-                            <h3 className="mb-2 text-lg font-semibold text-zinc-100">
+                            <h3 className="mb-[0.4rem] text-[1.1rem] leading-[1.4rem] font-bold text-[#232323]">
                                 {feature.title}
                             </h3>
-                            <p className="text-sm leading-relaxed text-zinc-400">
+                            <p className="text-[0.8rem] leading-[1.3rem] text-[#777]">
                                 {feature.description}
                             </p>
                         </div>
@@ -139,8 +136,8 @@ export default function Home() {
             </div>
 
             {/* How It Works Steps */}
-            <div className="w-full max-w-3xl py-16">
-                <div className="space-y-8">
+            <div className="w-full max-w-[700px] py-[4.4rem]">
+                <div className="space-y-[2rem]">
                     {[
                         {
                             step: "01",
@@ -163,15 +160,15 @@ export default function Home() {
                             desc: "Flare's FDC verifies YouTube view counts on-chain. Milestones unlock automatically as targets are hit.",
                         },
                     ].map((item) => (
-                        <div key={item.step} className="flex gap-6">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 text-sm font-bold text-blue-400">
+                        <div key={item.step} className="flex gap-[1.2rem]">
+                            <div className="flex h-[2.4rem] w-[2.4rem] shrink-0 items-center justify-center rounded-full border border-[#a0a0a0] bg-[#f6f6f6] text-[0.7rem] font-bold text-[#E62058]">
                                 {item.step}
                             </div>
                             <div>
-                                <h3 className="mb-1 font-semibold text-zinc-100">
+                                <h3 className="mb-[0.2rem] text-[0.95rem] font-bold text-[#232323]">
                                     {item.title}
                                 </h3>
-                                <p className="text-sm text-zinc-400">
+                                <p className="text-[0.8rem] leading-[1.3rem] text-[#777]">
                                     {item.desc}
                                 </p>
                             </div>

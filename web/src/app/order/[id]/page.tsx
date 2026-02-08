@@ -40,12 +40,12 @@ const STATUS_LABELS = [
 const MODE_LABELS = ["Milestone", "Linear"];
 
 const STATUS_COLORS: Record<number, string> = {
-    0: "bg-emerald-900/50 text-emerald-300 border border-emerald-800",
-    1: "bg-blue-900/50 text-blue-300 border border-blue-800",
-    2: "bg-amber-900/50 text-amber-300 border border-amber-800",
-    3: "bg-violet-900/50 text-violet-300 border border-violet-800",
-    4: "bg-zinc-800 text-zinc-400 border border-zinc-700",
-    5: "bg-red-900/50 text-red-300 border border-red-800",
+    0: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+    1: "bg-[#fff1f3] text-[#E62058] border border-[#ffccd5]",
+    2: "bg-amber-50 text-amber-700 border border-amber-200",
+    3: "bg-violet-50 text-violet-700 border border-violet-200",
+    4: "bg-[#f6f6f6] text-[#777] border border-[#c4c4c4]",
+    5: "bg-red-50 text-red-700 border border-red-200",
 };
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -110,12 +110,12 @@ export default function OrderDetail() {
     if (!deal) {
         return (
             <div className="mx-auto max-w-3xl">
-                <div className="animate-pulse space-y-6">
-                    <div className="h-8 w-48 rounded bg-zinc-800" />
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">
-                        <div className="h-6 w-64 rounded bg-zinc-800" />
-                        <div className="h-4 w-48 rounded bg-zinc-800" />
-                        <div className="h-4 w-56 rounded bg-zinc-800" />
+                <div className="animate-pulse space-y-[1.6rem]">
+                    <div className="h-[2rem] w-[12rem] rounded-[6px] bg-[#f6f6f6]" />
+                    <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem] space-y-[1rem]">
+                        <div className="h-[1.2rem] w-[16rem] rounded-[6px] bg-[#f6f6f6]" />
+                        <div className="h-[0.8rem] w-[12rem] rounded-[6px] bg-[#f6f6f6]" />
+                        <div className="h-[0.8rem] w-[14rem] rounded-[6px] bg-[#f6f6f6]" />
                     </div>
                 </div>
             </div>
@@ -364,10 +364,10 @@ export default function OrderDetail() {
             {/* Back link */}
             <Link
                 href="/marketplace"
-                className="mb-6 inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
+                className="mb-[1.6rem] inline-flex items-center gap-[0.4rem] text-[0.8rem] text-[#777] hover:text-[#232323] transition-colors duration-200"
             >
                 <svg
-                    className="h-4 w-4"
+                    className="h-[1rem] w-[1rem]"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
@@ -383,65 +383,65 @@ export default function OrderDetail() {
             </Link>
 
             {/* Header */}
-            <div className="mb-8 flex items-start justify-between">
+            <div className="mb-[2rem] flex items-start justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-zinc-50">
+                    <h1 className="text-[2.4rem] leading-[2.7rem] font-bold text-[#232323]">
                         Order #{dealId}
                     </h1>
-                    <p className="mt-1 text-zinc-400">
+                    <p className="mt-[0.4rem] text-[0.8rem] text-[#777]">
                         {MODE_LABELS[paymentMode]} payment deal
                     </p>
                 </div>
                 <span
-                    className={`px-4 py-1.5 rounded-full text-sm font-medium ${STATUS_COLORS[status]}`}
+                    className={`px-[0.8rem] py-[0.3rem] rounded-full text-[0.7rem] font-bold ${STATUS_COLORS[status]}`}
                 >
                     {STATUS_LABELS[status]}
                 </span>
             </div>
 
             {/* Deal Info */}
-            <div className="mb-6 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                <h2 className="mb-4 text-lg font-semibold text-zinc-100">
+            <div className="mb-[1.6rem] rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                <h2 className="mb-[1.2rem] text-[1.2rem] font-bold text-[#232323]">
                     Deal Information
                 </h2>
-                <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-2 gap-[1rem] text-[0.8rem]">
                     <div>
-                        <span className="text-zinc-500">Client</span>
-                        <p className="mt-1 font-mono text-xs text-zinc-300 break-all">
+                        <span className="text-[#a0a0a0]">Client</span>
+                        <p className="mt-[0.3rem] font-mono text-[0.7rem] text-[#232323] break-all">
                             {deal.client}
                         </p>
                     </div>
                     <div>
-                        <span className="text-zinc-500">Creator</span>
-                        <p className="mt-1 font-mono text-xs text-zinc-300 break-all">
+                        <span className="text-[#a0a0a0]">Creator</span>
+                        <p className="mt-[0.3rem] font-mono text-[0.7rem] text-[#232323] break-all">
                             {deal.creator === ZERO_ADDRESS
                                 ? "Not assigned yet"
                                 : deal.creator}
                         </p>
                     </div>
                     <div>
-                        <span className="text-zinc-500">Payment Mode</span>
-                        <p className="mt-1 text-zinc-300">
+                        <span className="text-[#a0a0a0]">Payment Mode</span>
+                        <p className="mt-[0.3rem] text-[#232323]">
                             {MODE_LABELS[paymentMode]}
                         </p>
                     </div>
                     <div>
-                        <span className="text-zinc-500">Total Budget</span>
-                        <p className="mt-1 font-semibold text-zinc-100">
+                        <span className="text-[#a0a0a0]">Total Budget</span>
+                        <p className="mt-[0.3rem] font-bold text-[#232323]">
                             {formatUnits(totalPayout, 6)} USDC
                         </p>
                     </div>
                     {deal.youtubeVideoId && (
                         <div>
-                            <span className="text-zinc-500">
+                            <span className="text-[#a0a0a0]">
                                 YouTube Video ID
                             </span>
-                            <p className="mt-1 text-zinc-300">
+                            <p className="mt-[0.3rem] text-[#232323]">
                                 <a
                                     href={`https://youtube.com/watch?v=${deal.youtubeVideoId}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-blue-400 hover:text-blue-300 transition-colors"
+                                    className="text-[#E62058] hover:text-[#c10f45] transition-colors duration-200"
                                 >
                                     {deal.youtubeVideoId}
                                 </a>
@@ -450,10 +450,10 @@ export default function OrderDetail() {
                     )}
                     {deal.videoDeadline > 0n && (
                         <div>
-                            <span className="text-zinc-500">
+                            <span className="text-[#a0a0a0]">
                                 Video Deadline
                             </span>
-                            <p className="mt-1 text-zinc-300">
+                            <p className="mt-[0.3rem] text-[#232323]">
                                 {status === 0
                                     ? `${Number(deal.videoDeadline) / 86400} days after acceptance`
                                     : new Date(
@@ -465,18 +465,18 @@ export default function OrderDetail() {
                     {deal.totalDeposited > 0n && (
                         <>
                             <div>
-                                <span className="text-zinc-500">
+                                <span className="text-[#a0a0a0]">
                                     Deposited
                                 </span>
-                                <p className="mt-1 text-zinc-300">
+                                <p className="mt-[0.3rem] text-[#232323]">
                                     {formatUnits(deal.totalDeposited, 6)} USDC
                                 </p>
                             </div>
                             <div>
-                                <span className="text-zinc-500">
+                                <span className="text-[#a0a0a0]">
                                     Paid Out
                                 </span>
-                                <p className="mt-1 text-zinc-300">
+                                <p className="mt-[0.3rem] text-[#232323]">
                                     {formatUnits(deal.totalPaid, 6)} USDC
                                 </p>
                             </div>
@@ -486,11 +486,11 @@ export default function OrderDetail() {
 
                 {/* Your role indicator */}
                 {address && (isClient || isCreator) && (
-                    <div className="mt-4 rounded-lg bg-zinc-800/50 px-4 py-2">
-                        <span className="text-xs text-zinc-500">
+                    <div className="mt-[1rem] rounded-[6px] bg-[#f6f6f6] px-[1rem] py-[0.5rem]">
+                        <span className="text-[0.7rem] text-[#a0a0a0]">
                             Your role:{" "}
                         </span>
-                        <span className="text-xs font-medium text-blue-400">
+                        <span className="text-[0.7rem] font-bold text-[#E62058]">
                             {isClient ? "Client" : "Creator"}
                         </span>
                     </div>
@@ -499,11 +499,11 @@ export default function OrderDetail() {
 
             {/* Milestones */}
             {paymentMode === 0 && milestones && (milestones as readonly unknown[]).length > 0 && (
-                <div className="mb-6 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                    <h2 className="mb-4 text-lg font-semibold text-zinc-100">
+                <div className="mb-[1.6rem] rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                    <h2 className="mb-[1.2rem] text-[1.2rem] font-bold text-[#232323]">
                         Milestones
                     </h2>
-                    <div className="space-y-3">
+                    <div className="space-y-[0.8rem]">
                         {(
                             milestones as readonly {
                                 viewTarget: bigint;
@@ -521,27 +521,27 @@ export default function OrderDetail() {
                             return (
                                 <div
                                     key={i}
-                                    className={`flex items-center justify-between rounded-lg border p-4 ${
+                                    className={`flex items-center justify-between rounded-[6px] border p-[1rem] ${
                                         ms.isPaid
-                                            ? "border-emerald-800/50 bg-emerald-900/10"
+                                            ? "border-emerald-200 bg-emerald-50"
                                             : isExpired
-                                              ? "border-red-800/50 bg-red-900/10"
-                                              : "border-zinc-700/50 bg-zinc-800/50"
+                                              ? "border-red-200 bg-red-50"
+                                              : "border-[#c4c4c4] bg-[#f6f6f6]"
                                     }`}
                                 >
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-[1rem]">
                                         <div
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
+                                            className={`flex h-[2rem] w-[2rem] items-center justify-center rounded-full text-[0.7rem] font-bold ${
                                                 ms.isPaid
-                                                    ? "bg-emerald-900 text-emerald-300"
+                                                    ? "bg-emerald-100 text-emerald-700"
                                                     : isExpired
-                                                      ? "bg-red-900 text-red-300"
-                                                      : "bg-zinc-700 text-zinc-300"
+                                                      ? "bg-red-100 text-red-700"
+                                                      : "bg-[#c4c4c4] text-[#232323]"
                                             }`}
                                         >
                                             {ms.isPaid ? (
                                                 <svg
-                                                    className="h-4 w-4"
+                                                    className="h-[1rem] w-[1rem]"
                                                     fill="none"
                                                     viewBox="0 0 24 24"
                                                     strokeWidth={2}
@@ -558,13 +558,13 @@ export default function OrderDetail() {
                                             )}
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-zinc-200">
+                                            <p className="text-[0.8rem] font-medium text-[#232323]">
                                                 {Number(
                                                     ms.viewTarget
                                                 ).toLocaleString()}{" "}
                                                 views
                                             </p>
-                                            <p className="text-xs text-zinc-500">
+                                            <p className="text-[0.7rem] text-[#a0a0a0]">
                                                 {formatUnits(
                                                     ms.payoutAmount,
                                                     6
@@ -584,9 +584,9 @@ export default function OrderDetail() {
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-[0.5rem]">
                                         {ms.isPaid && (
-                                            <span className="text-xs font-medium text-emerald-400">
+                                            <span className="text-[0.7rem] font-bold text-emerald-600">
                                                 Resolved
                                             </span>
                                         )}
@@ -599,13 +599,13 @@ export default function OrderDetail() {
                                                         handleClaimExpired(i)
                                                     }
                                                     disabled={isBusy}
-                                                    className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-red-500 disabled:opacity-50"
+                                                    className="rounded-[6px] bg-red-600 px-[0.8rem] py-[0.4rem] text-[0.7rem] font-bold text-white transition-colors duration-200 hover:bg-red-500 disabled:opacity-50"
                                                 >
                                                     Reclaim
                                                 </button>
                                             )}
                                         {!ms.isPaid && !isExpired && (
-                                            <span className="text-xs text-zinc-500">
+                                            <span className="text-[0.7rem] text-[#a0a0a0]">
                                                 Pending
                                             </span>
                                         )}
@@ -619,16 +619,16 @@ export default function OrderDetail() {
 
             {/* Linear Config */}
             {paymentMode === 1 && linearConfig && (
-                <div className="mb-6 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                    <h2 className="mb-4 text-lg font-semibold text-zinc-100">
+                <div className="mb-[1.6rem] rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                    <h2 className="mb-[1.2rem] text-[1.2rem] font-bold text-[#232323]">
                         Linear Payment Configuration
                     </h2>
-                    <div className="grid grid-cols-3 gap-4">
-                        <div className="rounded-lg bg-zinc-800/50 p-4">
-                            <span className="text-xs text-zinc-500">
+                    <div className="grid grid-cols-3 gap-[1rem]">
+                        <div className="rounded-[6px] bg-[#f6f6f6] p-[1rem]">
+                            <span className="text-[0.7rem] text-[#a0a0a0]">
                                 Rate per View
                             </span>
-                            <p className="mt-1 text-lg font-semibold text-zinc-100">
+                            <p className="mt-[0.3rem] text-[1.2rem] font-bold text-[#232323]">
                                 {formatUnits(
                                     (linearConfig as { ratePerView: bigint })
                                         .ratePerView,
@@ -637,11 +637,11 @@ export default function OrderDetail() {
                                 USDC
                             </p>
                         </div>
-                        <div className="rounded-lg bg-zinc-800/50 p-4">
-                            <span className="text-xs text-zinc-500">
+                        <div className="rounded-[6px] bg-[#f6f6f6] p-[1rem]">
+                            <span className="text-[0.7rem] text-[#a0a0a0]">
                                 Total Cap
                             </span>
-                            <p className="mt-1 text-lg font-semibold text-zinc-100">
+                            <p className="mt-[0.3rem] text-[1.2rem] font-bold text-[#232323]">
                                 {formatUnits(
                                     (linearConfig as { totalCap: bigint })
                                         .totalCap,
@@ -650,11 +650,11 @@ export default function OrderDetail() {
                                 USDC
                             </p>
                         </div>
-                        <div className="rounded-lg bg-zinc-800/50 p-4">
-                            <span className="text-xs text-zinc-500">
+                        <div className="rounded-[6px] bg-[#f6f6f6] p-[1rem]">
+                            <span className="text-[0.7rem] text-[#a0a0a0]">
                                 Views Claimed
                             </span>
-                            <p className="mt-1 text-lg font-semibold text-zinc-100">
+                            <p className="mt-[0.3rem] text-[1.2rem] font-bold text-[#232323]">
                                 {Number(
                                     (
                                         linearConfig as {
@@ -666,17 +666,17 @@ export default function OrderDetail() {
                         </div>
                     </div>
                     {deal.totalDeposited > 0n && (
-                        <div className="mt-4">
-                            <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
+                        <div className="mt-[1rem]">
+                            <div className="flex items-center justify-between text-[0.7rem] text-[#a0a0a0] mb-[0.3rem]">
                                 <span>Payment progress</span>
                                 <span>
                                     {formatUnits(deal.totalPaid, 6)} /{" "}
                                     {formatUnits(deal.totalDeposited, 6)} USDC
                                 </span>
                             </div>
-                            <div className="h-2 rounded-full bg-zinc-800">
+                            <div className="h-[0.3rem] rounded-full bg-[#f6f6f6]">
                                 <div
-                                    className="h-2 rounded-full bg-blue-600 transition-all"
+                                    className="h-[0.3rem] rounded-full bg-[#E62058] transition-all"
                                     style={{
                                         width: `${Math.min(100, (Number(deal.totalPaid) / Number(deal.totalDeposited)) * 100)}%`,
                                     }}
@@ -689,48 +689,48 @@ export default function OrderDetail() {
 
             {/* Actions */}
             {address && (
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                    <h2 className="mb-4 text-lg font-semibold text-zinc-100">
+                <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                    <h2 className="mb-[1.2rem] text-[1.2rem] font-bold text-[#232323]">
                         Actions
                     </h2>
 
                     {/* Open + Client role: Application List + Manual Fallback */}
                     {status === 0 && role === "client" && (
-                        <div className="space-y-4">
+                        <div className="space-y-[1rem]">
                             {pendingApplications.length > 0 ? (
-                                <div className="space-y-3">
-                                    <p className="text-sm text-zinc-400">
+                                <div className="space-y-[0.8rem]">
+                                    <p className="text-[0.8rem] text-[#777]">
                                         Review applications from creators who want to work on this order.
                                     </p>
                                     {pendingApplications.map((app) => (
                                         <div
                                             key={app.id}
-                                            className="flex items-start justify-between rounded-lg border border-zinc-700/50 bg-zinc-800/50 p-4"
+                                            className="flex items-start justify-between rounded-[6px] border border-[#c4c4c4] bg-[#f6f6f6] p-[1rem]"
                                         >
                                             <div className="min-w-0 flex-1">
-                                                <p className="font-mono text-xs text-zinc-300 break-all">
+                                                <p className="font-mono text-[0.7rem] text-[#232323] break-all">
                                                     {app.creator_address}
                                                 </p>
                                                 {app.message && (
-                                                    <p className="mt-1.5 text-sm text-zinc-400">
+                                                    <p className="mt-[0.4rem] text-[0.8rem] text-[#777]">
                                                         {app.message}
                                                     </p>
                                                 )}
-                                                <p className="mt-1 text-xs text-zinc-600">
+                                                <p className="mt-[0.3rem] text-[0.7rem] text-[#a0a0a0]">
                                                     {new Date(app.created_at).toLocaleDateString()}
                                                 </p>
                                             </div>
-                                            <div className="ml-4 flex gap-2 shrink-0">
+                                            <div className="ml-[1rem] flex gap-[0.5rem] shrink-0">
                                                 <button
                                                     onClick={() => handleAcceptApplication(app)}
                                                     disabled={isBusy}
-                                                    className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-emerald-500 disabled:opacity-50"
+                                                    className="rounded-[6px] bg-emerald-600 px-[0.8rem] py-[0.4rem] text-[0.7rem] font-bold text-white transition-colors duration-200 hover:bg-emerald-500 disabled:opacity-50"
                                                 >
                                                     Accept
                                                 </button>
                                                 <button
                                                     onClick={() => handleRejectApplication(app)}
-                                                    className="rounded-lg bg-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-600"
+                                                    className="rounded-[6px] bg-[#f6f6f6] px-[0.8rem] py-[0.4rem] text-[0.7rem] font-bold text-[#232323] transition-colors duration-200 hover:bg-[#c4c4c4] border border-[#a0a0a0]"
                                                 >
                                                     Reject
                                                 </button>
@@ -739,7 +739,7 @@ export default function OrderDetail() {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-sm text-zinc-400">
+                                <p className="text-[0.8rem] text-[#777]">
                                     No applications yet. Share this order with creators!
                                 </p>
                             )}
@@ -749,25 +749,25 @@ export default function OrderDetail() {
 
                     {/* Open + Creator role: Apply */}
                     {status === 0 && role === "creator" && (
-                        <div className="space-y-3">
+                        <div className="space-y-[0.8rem]">
                             {myApplication ? (
-                                <div className="rounded-lg bg-blue-900/10 border border-blue-800/50 p-4">
-                                    <p className="text-sm font-medium text-blue-300">
+                                <div className="rounded-[6px] bg-[#fff1f3] border border-[#ffccd5] p-[1rem]">
+                                    <p className="text-[0.8rem] font-bold text-[#E62058]">
                                         Application Submitted
                                     </p>
                                     {myApplication.message && (
-                                        <p className="mt-1.5 text-sm text-zinc-400">
+                                        <p className="mt-[0.4rem] text-[0.8rem] text-[#777]">
                                             Your message: {myApplication.message}
                                         </p>
                                     )}
-                                    <p className="mt-1 text-xs text-zinc-500">
+                                    <p className="mt-[0.3rem] text-[0.7rem] text-[#a0a0a0]">
                                         Status: {myApplication.status} &middot; Submitted{" "}
                                         {new Date(myApplication.created_at).toLocaleDateString()}
                                     </p>
                                 </div>
                             ) : (
                                 <>
-                                    <p className="text-sm text-zinc-400">
+                                    <p className="text-[0.8rem] text-[#777]">
                                         Interested in this sponsorship? Submit an application to the client.
                                     </p>
                                     <textarea
@@ -775,12 +775,12 @@ export default function OrderDetail() {
                                         onChange={(e) => setApplicationMessage(e.target.value)}
                                         placeholder="Optional message to the client (e.g. your channel name, audience size, why you're a good fit)"
                                         rows={3}
-                                        className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                                        className="w-full rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#a0a0a0] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058] resize-none"
                                     />
                                     <button
                                         onClick={handleSubmitApplication}
                                         disabled={isSubmittingApp}
-                                        className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full rounded-[6px] bg-[#E62058] px-[1rem] py-[0.8rem] text-[0.8rem] font-bold text-white transition-all hover:bg-[#c10f45] active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isSubmittingApp
                                             ? "Submitting..."
@@ -793,8 +793,8 @@ export default function OrderDetail() {
 
                     {/* InProgress + Creator role: Upload & Submit Video */}
                     {status === 1 && role === "creator" && (
-                        <div className="space-y-4">
-                            <p className="text-sm text-zinc-400">
+                        <div className="space-y-[1rem]">
+                            <p className="text-[0.8rem] text-[#777]">
                                 Upload your video to YouTube and submit it for
                                 the client to review. It will be published as
                                 unlisted until the client approves.
@@ -813,10 +813,10 @@ export default function OrderDetail() {
 
                             {/* Upload result */}
                             {videoId && etagHash && !showManualVideoInput && (
-                                <div className="rounded-lg bg-emerald-900/10 border border-emerald-800/50 p-4">
-                                    <div className="flex items-center gap-2 mb-1">
+                                <div className="rounded-[6px] bg-emerald-50 border border-emerald-200 p-[1rem]">
+                                    <div className="flex items-center gap-[0.5rem] mb-[0.3rem]">
                                         <svg
-                                            className="h-4 w-4 text-emerald-400"
+                                            className="h-[1rem] w-[1rem] text-emerald-600"
                                             fill="none"
                                             viewBox="0 0 24 24"
                                             strokeWidth={2}
@@ -828,13 +828,13 @@ export default function OrderDetail() {
                                                 d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                             />
                                         </svg>
-                                        <p className="text-sm font-medium text-emerald-300">
+                                        <p className="text-[0.8rem] font-bold text-emerald-700">
                                             Video Ready
                                         </p>
                                     </div>
-                                    <p className="text-xs text-zinc-400">
+                                    <p className="text-[0.7rem] text-[#777]">
                                         Video ID:{" "}
-                                        <span className="font-mono text-zinc-300">
+                                        <span className="font-mono text-[#232323]">
                                             {videoId}
                                         </span>
                                     </p>
@@ -843,21 +843,21 @@ export default function OrderDetail() {
 
                             {/* Manual fallback */}
                             {!videoId && (
-                                <div className="border-t border-zinc-800 pt-3">
+                                <div className="border-t border-[#c4c4c4] pt-[0.8rem]">
                                     <button
                                         onClick={() =>
                                             setShowManualVideoInput(
                                                 !showManualVideoInput
                                             )
                                         }
-                                        className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                                        className="text-[0.7rem] text-[#a0a0a0] hover:text-[#232323] transition-colors duration-200"
                                     >
                                         {showManualVideoInput
                                             ? "Hide manual input"
                                             : "Or enter video details manually"}
                                     </button>
                                     {showManualVideoInput && (
-                                        <div className="mt-3 space-y-3">
+                                        <div className="mt-[0.8rem] space-y-[0.8rem]">
                                             <input
                                                 type="text"
                                                 value={videoId}
@@ -865,7 +865,7 @@ export default function OrderDetail() {
                                                     setVideoId(e.target.value)
                                                 }
                                                 placeholder="YouTube Video ID (e.g. dQw4w9WgXcQ)"
-                                                className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                className="w-full rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#a0a0a0] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
                                             />
                                             <input
                                                 type="text"
@@ -874,7 +874,7 @@ export default function OrderDetail() {
                                                     setEtagHash(e.target.value)
                                                 }
                                                 placeholder="Video Etag (from YouTube API)"
-                                                className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                className="w-full rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#a0a0a0] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
                                             />
                                         </div>
                                     )}
@@ -886,7 +886,7 @@ export default function OrderDetail() {
                                 <button
                                     onClick={handleSubmitVideo}
                                     disabled={isBusy}
-                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full rounded-[6px] bg-[#E62058] px-[1rem] py-[0.8rem] text-[0.8rem] font-bold text-white transition-all hover:bg-[#c10f45] active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isBusy
                                         ? "Processing..."
@@ -898,28 +898,28 @@ export default function OrderDetail() {
 
                     {/* InProgress + Client role: Waiting for creator */}
                     {status === 1 && role === "client" && (
-                        <div className="space-y-3">
-                            <div className="rounded-lg bg-blue-900/10 border border-blue-800/50 p-4">
-                                <p className="text-sm font-medium text-blue-300">
+                        <div className="space-y-[0.8rem]">
+                            <div className="rounded-[6px] bg-[#fff1f3] border border-[#ffccd5] p-[1rem]">
+                                <p className="text-[0.8rem] font-bold text-[#E62058]">
                                     Waiting for Creator to Submit Video
                                 </p>
-                                <div className="mt-3 space-y-2 text-sm">
+                                <div className="mt-[0.8rem] space-y-[0.5rem] text-[0.8rem]">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-zinc-500">Creator</span>
-                                        <span className="font-mono text-xs text-zinc-300">
+                                        <span className="text-[#a0a0a0]">Creator</span>
+                                        <span className="font-mono text-[0.7rem] text-[#232323]">
                                             {deal.creator.slice(0, 6)}...{deal.creator.slice(-4)}
                                         </span>
                                     </div>
                                     {deal.videoDeadline > 0n && (
                                         <div className="flex items-center justify-between">
-                                            <span className="text-zinc-500">Deadline</span>
-                                            <span className="text-zinc-300">
+                                            <span className="text-[#a0a0a0]">Deadline</span>
+                                            <span className="text-[#232323]">
                                                 {new Date(Number(deal.videoDeadline) * 1000).toLocaleDateString()}
                                             </span>
                                         </div>
                                     )}
                                 </div>
-                                <p className="mt-3 text-xs text-zinc-500">
+                                <p className="mt-[0.8rem] text-[0.7rem] text-[#a0a0a0]">
                                     The creator needs to upload their YouTube video and submit it for your review.
                                 </p>
                             </div>
@@ -928,11 +928,11 @@ export default function OrderDetail() {
 
                     {/* InReview + Client role: Approve Video */}
                     {status === 2 && role === "client" && (
-                        <div className="space-y-3">
-                            <p className="text-sm text-zinc-400">
+                        <div className="space-y-[0.8rem]">
+                            <p className="text-[0.8rem] text-[#777]">
                                 Review the submitted video. Approving will
                                 deposit{" "}
-                                <span className="font-semibold text-zinc-200">
+                                <span className="font-bold text-[#232323]">
                                     {formatUnits(totalPayout, 6)} USDC
                                 </span>{" "}
                                 into escrow.
@@ -942,10 +942,10 @@ export default function OrderDetail() {
                                     href={`https://youtube.com/watch?v=${deal.youtubeVideoId}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-blue-400 hover:border-zinc-600 hover:bg-zinc-700 transition-all"
+                                    className="flex items-center gap-[0.5rem] rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.8rem] text-[0.8rem] text-[#E62058] hover:border-[#E62058] hover:bg-white transition-all duration-200"
                                 >
                                     <svg
-                                        className="h-5 w-5"
+                                        className="h-[1.2rem] w-[1.2rem]"
                                         fill="currentColor"
                                         viewBox="0 0 24 24"
                                     >
@@ -957,7 +957,7 @@ export default function OrderDetail() {
                             <button
                                 onClick={handleApproveVideo}
                                 disabled={isBusy}
-                                className="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full rounded-[6px] bg-emerald-600 px-[1rem] py-[0.8rem] text-[0.8rem] font-bold text-white transition-colors duration-200 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isBusy
                                     ? "Processing..."
@@ -968,11 +968,11 @@ export default function OrderDetail() {
 
                     {/* InReview + Creator role: Waiting for client */}
                     {status === 2 && role === "creator" && (
-                        <div className="rounded-lg bg-amber-900/10 border border-amber-800/50 p-4">
-                            <p className="text-sm font-medium text-amber-300">
+                        <div className="rounded-[6px] bg-amber-50 border border-amber-200 p-[1rem]">
+                            <p className="text-[0.8rem] font-bold text-amber-700">
                                 Video Under Review
                             </p>
-                            <p className="mt-1.5 text-xs text-zinc-500">
+                            <p className="mt-[0.4rem] text-[0.7rem] text-[#a0a0a0]">
                                 The client is reviewing your submitted video. You&apos;ll be notified once they approve and deposit funds into escrow.
                             </p>
                         </div>
@@ -980,22 +980,22 @@ export default function OrderDetail() {
 
                     {/* Active + Creator role: Claim earnings */}
                     {status === 3 && role === "creator" && (
-                        <div className="space-y-4">
-                            <p className="text-sm text-zinc-400">
+                        <div className="space-y-[1rem]">
+                            <p className="text-[0.8rem] text-[#777]">
                                 View counts are verified on-chain every 5 minutes via Flare&apos;s FDC protocol. Claim your earnings when ready.
                             </p>
 
                             {/* Verified views */}
-                            <div className="rounded-lg bg-zinc-800/50 p-4">
-                                <span className="text-xs text-zinc-500">Verified Views</span>
-                                <p className="mt-1 text-2xl font-bold text-zinc-100">
+                            <div className="rounded-[6px] bg-[#f6f6f6] p-[1rem]">
+                                <span className="text-[0.7rem] text-[#a0a0a0]">Verified Views</span>
+                                <p className="mt-[0.3rem] text-[2rem] font-bold text-[#232323]">
                                     {Number(deal.lastVerifiedViews).toLocaleString()}
                                 </p>
                             </div>
 
                             {/* Milestone claim buttons */}
                             {paymentMode === 0 && milestones && (
-                                <div className="space-y-2">
+                                <div className="space-y-[0.5rem]">
                                     {(milestones as readonly { viewTarget: bigint; payoutAmount: bigint; isPaid: boolean }[]).map((ms, i) => {
                                         const reached = deal.lastVerifiedViews >= ms.viewTarget;
                                         if (ms.isPaid) return null;
@@ -1019,8 +1019,8 @@ export default function OrderDetail() {
                                                     });
                                                 }}
                                                 disabled={isBusy || !reached}
-                                                className={`w-full rounded-lg px-4 py-3 text-sm font-medium text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                                                    reached ? "bg-emerald-600 hover:bg-emerald-500" : "bg-zinc-700"
+                                                className={`w-full rounded-[6px] px-[1rem] py-[0.8rem] text-[0.8rem] font-bold text-white transition-all active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                                                    reached ? "bg-emerald-600 hover:bg-emerald-500" : "bg-[#a0a0a0]"
                                                 }`}
                                             >
                                                 {reached
@@ -1062,7 +1062,7 @@ export default function OrderDetail() {
                                             });
                                         }}
                                         disabled={isBusy || amount === 0n}
-                                        className="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full rounded-[6px] bg-emerald-600 px-[1rem] py-[0.8rem] text-[0.8rem] font-bold text-white transition-all active:scale-95 duration-200 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {amount > 0n
                                             ? `Claim ${formatUnits(amount, 6)} USDC (${Number(newViews).toLocaleString()} new views)`
@@ -1076,13 +1076,13 @@ export default function OrderDetail() {
 
                     {/* Active + Client role: Monitoring info */}
                     {status === 3 && role === "client" && (
-                        <div className="space-y-3">
-                            <p className="text-sm text-zinc-400">
+                        <div className="space-y-[0.8rem]">
+                            <p className="text-[0.8rem] text-[#777]">
                                 This deal is active. View counts are verified on-chain every 5 minutes via Flare&apos;s FDC protocol.
                             </p>
-                            <div className="rounded-lg bg-zinc-800/50 p-4">
-                                <span className="text-xs text-zinc-500">Verified Views</span>
-                                <p className="mt-1 text-2xl font-bold text-zinc-100">
+                            <div className="rounded-[6px] bg-[#f6f6f6] p-[1rem]">
+                                <span className="text-[0.7rem] text-[#a0a0a0]">Verified Views</span>
+                                <p className="mt-[0.3rem] text-[2rem] font-bold text-[#232323]">
                                     {Number(deal.lastVerifiedViews).toLocaleString()}
                                 </p>
                             </div>
@@ -1091,16 +1091,16 @@ export default function OrderDetail() {
 
                     {/* Completed / Terminated */}
                     {status === 4 && (
-                        <div className="rounded-lg bg-emerald-900/10 border border-emerald-800/50 p-4">
-                            <p className="text-sm text-emerald-300">
+                        <div className="rounded-[6px] bg-emerald-50 border border-emerald-200 p-[1rem]">
+                            <p className="text-[0.8rem] text-emerald-700">
                                 This deal has been completed. All milestones
                                 have been resolved.
                             </p>
                         </div>
                     )}
                     {status === 5 && (
-                        <div className="rounded-lg bg-red-900/10 border border-red-800/50 p-4">
-                            <p className="text-sm text-red-300">
+                        <div className="rounded-[6px] bg-red-50 border border-red-200 p-[1rem]">
+                            <p className="text-[0.8rem] text-red-700">
                                 This deal was terminated due to video tampering.
                                 Remaining funds were returned to the client.
                             </p>
@@ -1109,7 +1109,7 @@ export default function OrderDetail() {
 
                     {/* Not connected to right role — only show for non-Open, non-terminal deals */}
                     {!isClient && !isCreator && status > 0 && status < 4 && (
-                        <p className="text-sm text-zinc-500">
+                        <p className="text-[0.8rem] text-[#a0a0a0]">
                             You are not a participant in this deal. Connect the
                             client or creator wallet to take actions.
                         </p>
@@ -1118,8 +1118,8 @@ export default function OrderDetail() {
             )}
 
             {!address && (
-                <div className="rounded-xl border border-dashed border-zinc-800 p-8 text-center">
-                    <p className="text-zinc-500">
+                <div className="rounded-[10px] border border-dashed border-[#c4c4c4] p-[2rem] text-center">
+                    <p className="text-[#a0a0a0]">
                         Connect your wallet to interact with this order
                     </p>
                 </div>

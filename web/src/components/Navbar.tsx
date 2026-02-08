@@ -8,65 +8,65 @@ export function Navbar() {
     const { role, setRole } = useRole();
 
     return (
-        <nav className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
-                    <div className="flex items-center gap-8">
-                        <Link href="/" className="flex items-center gap-2">
-                            <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-                                <span className="text-sm font-bold text-white">TT</span>
+        <nav className="border-b border-[#c4c4c4] bg-white/90 backdrop-blur-sm sticky top-0 z-50">
+            <div className="mx-auto max-w-[1448px] px-[1.6rem]">
+                <div className="flex h-[4rem] items-center justify-between">
+                    <div className="flex items-center gap-[2.4rem]">
+                        <Link href="/" className="flex items-center gap-[0.6rem]">
+                            <div className="h-[2rem] w-[2rem] rounded-[6px] bg-[#E62058] flex items-center justify-center">
+                                <span className="text-[0.7rem] font-bold text-white">TT</span>
                             </div>
-                            <span className="text-lg font-semibold text-zinc-100">
+                            <span className="text-[1.1rem] font-bold text-[#232323]">
                                 TrustTube
                             </span>
                         </Link>
-                        <div className="hidden sm:flex items-center gap-6">
+                        <div className="hidden sm:flex items-center gap-[1.6rem]">
                             <Link
                                 href="/marketplace"
-                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                                className="text-[0.8rem] font-medium text-[#777] hover:text-[#E62058] transition-colors duration-200"
                             >
                                 Marketplace
                             </Link>
                             {role === "client" && (
                                 <Link
                                     href="/create-order"
-                                    className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                                    className="text-[0.8rem] font-medium text-[#777] hover:text-[#E62058] transition-colors duration-200"
                                 >
                                     Create Order
                                 </Link>
                             )}
                             <Link
                                 href="/dashboard"
-                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                                className="text-[0.8rem] font-medium text-[#777] hover:text-[#E62058] transition-colors duration-200"
                             >
                                 Dashboard
                             </Link>
                             <Link
                                 href="/keeper"
-                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                                className="text-[0.8rem] font-medium text-[#777] hover:text-[#E62058] transition-colors duration-200"
                             >
                                 Keeper
                             </Link>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="flex gap-0.5 rounded-lg bg-zinc-900 p-0.5 border border-zinc-800">
+                    <div className="flex items-center gap-[0.8rem]">
+                        <div className="flex gap-[0.2rem] rounded-[6px] bg-[#f6f6f6] p-[0.2rem] border border-[#c4c4c4]">
                             <button
                                 onClick={() => setRole("client")}
-                                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                                className={`rounded-[4px] px-[0.8rem] py-[0.4rem] text-[0.7rem] font-medium transition-all duration-200 ${
                                     role === "client"
-                                        ? "bg-zinc-800 text-zinc-100 shadow-sm"
-                                        : "text-zinc-400 hover:text-zinc-200"
+                                        ? "bg-white text-[#232323] shadow-sm"
+                                        : "text-[#777] hover:text-[#232323]"
                                 }`}
                             >
                                 Client
                             </button>
                             <button
                                 onClick={() => setRole("creator")}
-                                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                                className={`rounded-[4px] px-[0.8rem] py-[0.4rem] text-[0.7rem] font-medium transition-all duration-200 ${
                                     role === "creator"
-                                        ? "bg-zinc-800 text-zinc-100 shadow-sm"
-                                        : "text-zinc-400 hover:text-zinc-200"
+                                        ? "bg-white text-[#232323] shadow-sm"
+                                        : "text-[#777] hover:text-[#232323]"
                                 }`}
                             >
                                 Creator

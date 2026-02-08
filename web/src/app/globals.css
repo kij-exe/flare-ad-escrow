@@ -1,15 +1,31 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
+  --background: #ffffff;
+  --foreground: #232323;
+  --flare-pink: #E62058;
+  --flare-pink-hover: #c10f45;
+  --flare-pink-dark: #8a113e;
+  --flare-gray: #777;
+  --flare-border: #c4c4c4;
+  --flare-border-dark: #a0a0a0;
+  --flare-bg-light: #f6f6f6;
+  --flare-bg-pink: #fff1f3;
+  --flare-bg-pink-hover: #ffe4e8;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Inter", sans-serif;
+  font-family: "Satoshi", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 input[type="number"]::-webkit-inner-spin-button,

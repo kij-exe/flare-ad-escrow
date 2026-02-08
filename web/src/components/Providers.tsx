@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { WagmiProvider, type Config } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, lightTheme } from "@rainbow-me/rainbowkit";
 import { Toaster } from "react-hot-toast";
 import { RoleProvider } from "@/context/RoleContext";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -25,20 +25,25 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
                 <RainbowKitProvider
-                    theme={darkTheme({
-                        accentColor: "#3b82f6",
+                    theme={lightTheme({
+                        accentColor: "#E62058",
                         accentColorForeground: "white",
                         borderRadius: "medium",
                         overlayBlur: "small",
+                        fontStack: "system",
                     })}
                 >
                     <Toaster
                         position="bottom-right"
                         toastOptions={{
                             style: {
-                                background: "#18181b",
-                                color: "#fafafa",
-                                border: "1px solid #27272a",
+                                background: "#ffffff",
+                                color: "#232323",
+                                border: "1px solid #c4c4c4",
+                                borderRadius: "10px",
+                                fontFamily: "Satoshi, sans-serif",
+                                fontSize: "0.8rem",
+                                fontWeight: 500,
                             },
                         }}
                     />

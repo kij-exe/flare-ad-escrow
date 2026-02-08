@@ -107,10 +107,10 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
     // Upload complete
     if (result) {
         return (
-            <div className="rounded-lg bg-emerald-900/10 border border-emerald-800/50 p-4">
+            <div className="rounded-[10px] bg-emerald-50 border border-emerald-200 p-[1.2rem]">
                 <div className="flex items-center gap-2 mb-1.5">
                     <svg
-                        className="h-4 w-4 text-emerald-400"
+                        className="h-[1rem] w-[1rem] text-emerald-600"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={2}
@@ -122,13 +122,13 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                             d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                     </svg>
-                    <p className="text-sm font-medium text-emerald-300">
+                    <p className="text-[0.8rem] font-medium text-emerald-700">
                         Video Uploaded (Unlisted)
                     </p>
                 </div>
-                <p className="text-xs text-zinc-400">
+                <p className="text-[0.7rem] text-[#777]">
                     Video ID:{" "}
-                    <span className="font-mono text-zinc-300">
+                    <span className="font-mono text-[#232323]">
                         {result.videoId}
                     </span>
                 </p>
@@ -136,7 +136,7 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                     href={`https://youtube.com/watch?v=${result.videoId}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300"
+                    className="mt-2 inline-flex items-center gap-1.5 text-[0.7rem] text-[#E62058] hover:text-[#c10f45]"
                 >
                     Preview on YouTube &rarr;
                 </a>
@@ -147,21 +147,21 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
     // Uploading
     if (isUploading) {
         return (
-            <div className="rounded-lg border border-zinc-700/50 bg-zinc-800/50 p-4">
-                <div className="flex items-center justify-between text-sm mb-2">
-                    <span className="text-zinc-300">
+            <div className="rounded-[10px] border border-[#c4c4c4] bg-[#f6f6f6] p-[1.2rem]">
+                <div className="flex items-center justify-between text-[0.8rem] mb-2">
+                    <span className="text-[#232323]">
                         Uploading to YouTube...
                     </span>
-                    <span className="text-zinc-400">{uploadProgress}%</span>
+                    <span className="text-[#777]">{uploadProgress}%</span>
                 </div>
-                <div className="h-2 rounded-full bg-zinc-700">
+                <div className="h-[0.4rem] rounded-full bg-[#c4c4c4]">
                     <div
-                        className="h-2 rounded-full bg-blue-600 transition-all"
+                        className="h-[0.4rem] rounded-full bg-[#E62058] transition-all"
                         style={{ width: `${uploadProgress}%` }}
                     />
                 </div>
                 {file && (
-                    <p className="mt-2 text-xs text-zinc-500">
+                    <p className="mt-2 text-[0.7rem] text-[#a0a0a0]">
                         {file.name} ({formatFileSize(file.size)})
                     </p>
                 )}
@@ -175,10 +175,10 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
             <button
                 onClick={handleSignIn}
                 disabled={isAuthenticating}
-                className="w-full flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm font-medium text-zinc-100 transition-colors hover:border-zinc-600 hover:bg-zinc-700 disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.8rem] text-[0.8rem] font-bold text-[#232323] transition-colors hover:border-[#E62058] hover:bg-white disabled:opacity-50"
             >
                 <svg
-                    className="h-5 w-5 text-red-500"
+                    className="h-[1.6rem] w-[1.6rem] text-[#E62058]"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                 >
@@ -202,12 +202,12 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 cursor-pointer transition-all ${
+                className={`flex flex-col items-center justify-center rounded-[10px] border-2 border-dashed p-[2rem] cursor-pointer transition-all ${
                     isDragging
-                        ? "border-blue-500 bg-blue-900/10"
+                        ? "border-[#E62058] bg-[#fff1f3]"
                         : file
-                          ? "border-emerald-700 bg-emerald-900/10"
-                          : "border-zinc-700 bg-zinc-800/30 hover:border-zinc-500"
+                          ? "border-emerald-300 bg-emerald-50"
+                          : "border-[#a0a0a0] bg-[#f6f6f6] hover:border-[#E62058]"
                 }`}
             >
                 <input
@@ -220,7 +220,7 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                 {file ? (
                     <>
                         <svg
-                            className="h-8 w-8 text-emerald-400 mb-2"
+                            className="h-[1.6rem] w-[1.6rem] text-emerald-500 mb-2"
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
@@ -232,10 +232,10 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                                 d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             />
                         </svg>
-                        <p className="text-sm font-medium text-zinc-200">
+                        <p className="text-[0.8rem] font-medium text-[#232323]">
                             {file.name}
                         </p>
-                        <p className="text-xs text-zinc-500">
+                        <p className="text-[0.7rem] text-[#a0a0a0]">
                             {formatFileSize(file.size)}
                         </p>
                         <button
@@ -243,7 +243,7 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                                 e.stopPropagation();
                                 setFile(null);
                             }}
-                            className="mt-2 text-xs text-zinc-500 hover:text-zinc-300"
+                            className="mt-2 text-[0.7rem] text-[#a0a0a0] hover:text-[#232323]"
                         >
                             Change file
                         </button>
@@ -251,7 +251,7 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                 ) : (
                     <>
                         <svg
-                            className="h-8 w-8 text-zinc-500 mb-2"
+                            className="h-[1.6rem] w-[1.6rem] text-[#a0a0a0] mb-2"
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
@@ -263,10 +263,10 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                                 d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
                             />
                         </svg>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-[0.8rem] text-[#777]">
                             Drag & drop your video here
                         </p>
-                        <p className="text-xs text-zinc-600">
+                        <p className="text-[0.7rem] text-[#a0a0a0]">
                             or click to browse
                         </p>
                     </>
@@ -278,20 +278,20 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Video title"
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.6rem] text-[0.8rem] text-[#232323] placeholder-[#a0a0a0] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
             />
             <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Video description"
                 rows={2}
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                className="w-full rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.6rem] text-[0.8rem] text-[#232323] placeholder-[#a0a0a0] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058] resize-none"
             />
 
             {file && (
                 <button
                     onClick={handleUpload}
-                    className="w-full rounded-lg bg-red-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-red-500"
+                    className="w-full rounded-[6px] bg-[#E62058] px-[1rem] py-[0.8rem] text-[0.8rem] font-bold text-white transition-colors hover:bg-[#c10f45]"
                 >
                     Upload to YouTube (Unlisted)
                 </button>

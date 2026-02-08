@@ -166,29 +166,29 @@ export default function CreateOrder() {
 
     return (
         <div className="mx-auto max-w-2xl">
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-zinc-50">
+            <div className="mb-[2rem]">
+                <h1 className="text-[2.4rem] leading-[2.7rem] font-bold text-[#232323]">
                     Create Sponsorship Order
                 </h1>
-                <p className="mt-2 text-zinc-400">
+                <p className="mt-[0.5rem] text-[0.8rem] font-medium text-[#777]">
                     Define your sponsorship terms and payment structure
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-[2rem]">
                 {/* Payment Mode Toggle */}
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                    <label className="mb-3 block text-sm font-medium text-zinc-300">
+                <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                    <label className="mb-[0.8rem] block text-[0.8rem] font-medium text-[#232323]">
                         Payment Mode
                     </label>
-                    <div className="flex rounded-lg bg-zinc-800 p-1">
+                    <div className="flex rounded-[6px] bg-[#f6f6f6] p-1">
                         <button
                             type="button"
                             onClick={() => setPaymentMode("milestone")}
-                            className={`flex-1 rounded-md px-4 py-2.5 text-sm font-medium transition-all ${
+                            className={`flex-1 rounded-[6px] px-[1rem] py-[0.8rem] text-[0.8rem] font-bold transition-all duration-200 ${
                                 paymentMode === "milestone"
-                                    ? "bg-blue-600 text-white shadow-sm"
-                                    : "text-zinc-400 hover:text-zinc-200"
+                                    ? "bg-[#E62058] text-white shadow-sm"
+                                    : "text-[#777] hover:text-[#232323]"
                             }`}
                         >
                             Milestone
@@ -196,16 +196,16 @@ export default function CreateOrder() {
                         <button
                             type="button"
                             onClick={() => setPaymentMode("linear")}
-                            className={`flex-1 rounded-md px-4 py-2.5 text-sm font-medium transition-all ${
+                            className={`flex-1 rounded-[6px] px-[1rem] py-[0.8rem] text-[0.8rem] font-bold transition-all duration-200 ${
                                 paymentMode === "linear"
-                                    ? "bg-blue-600 text-white shadow-sm"
-                                    : "text-zinc-400 hover:text-zinc-200"
+                                    ? "bg-[#E62058] text-white shadow-sm"
+                                    : "text-[#777] hover:text-[#232323]"
                             }`}
                         >
                             Linear (Pay-per-View)
                         </button>
                     </div>
-                    <p className="mt-3 text-xs text-zinc-500">
+                    <p className="mt-[0.8rem] text-[0.7rem] text-[#777]">
                         {paymentMode === "milestone"
                             ? "Pay fixed amounts when specific view count targets are reached."
                             : "Pay a fixed rate per view up to a maximum cap."}
@@ -213,8 +213,8 @@ export default function CreateOrder() {
                 </div>
 
                 {/* Video Deadline */}
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                    <label className="mb-3 block text-sm font-medium text-zinc-300">
+                <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                    <label className="mb-[0.8rem] block text-[0.8rem] font-medium text-[#232323]">
                         Video Deadline (days after creator acceptance)
                     </label>
                     <input
@@ -222,29 +222,29 @@ export default function CreateOrder() {
                         min="1"
                         value={videoDeadlineDays}
                         onChange={(e) => setVideoDeadlineDays(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-full rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#777] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
                         placeholder="Number of days"
                         required
                     />
-                    <p className="mt-2 text-xs text-zinc-500">
+                    <p className="mt-[0.5rem] text-[0.7rem] text-[#777]">
                         The creator must submit their video within this many days of accepting the order.
                     </p>
                 </div>
 
                 {/* Milestone Configuration */}
                 {paymentMode === "milestone" && (
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                        <div className="mb-4 flex items-center justify-between">
-                            <label className="text-sm font-medium text-zinc-300">
+                    <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                        <div className="mb-[1rem] flex items-center justify-between">
+                            <label className="text-[0.8rem] font-medium text-[#232323]">
                                 Milestones
                             </label>
                             <button
                                 type="button"
                                 onClick={addMilestone}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:border-zinc-600 hover:bg-zinc-700"
+                                className="inline-flex items-center gap-[0.4rem] rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[0.8rem] py-[0.4rem] text-[0.7rem] font-bold text-[#232323] transition-all duration-200 hover:border-[#E62058] hover:bg-[#fff1f3]"
                             >
                                 <svg
-                                    className="h-3.5 w-3.5"
+                                    className="h-[0.8rem] w-[0.8rem]"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     strokeWidth={2}
@@ -260,14 +260,14 @@ export default function CreateOrder() {
                             </button>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-[1rem]">
                             {milestones.map((milestone, index) => (
                                 <div
                                     key={index}
-                                    className="rounded-lg border border-zinc-700/50 bg-zinc-800/50 p-4"
+                                    className="rounded-[6px] border border-[#c4c4c4] bg-[#f6f6f6] p-[1rem]"
                                 >
-                                    <div className="mb-3 flex items-center justify-between">
-                                        <span className="text-xs font-medium text-zinc-400">
+                                    <div className="mb-[0.8rem] flex items-center justify-between">
+                                        <span className="text-[0.7rem] font-bold text-[#777]">
                                             Milestone {index + 1}
                                         </span>
                                         {milestones.length > 1 && (
@@ -276,15 +276,15 @@ export default function CreateOrder() {
                                                 onClick={() =>
                                                     removeMilestone(index)
                                                 }
-                                                className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                                                className="text-[0.7rem] text-[#E62058] hover:text-[#c10f45] transition-all duration-200"
                                             >
                                                 Remove
                                             </button>
                                         )}
                                     </div>
-                                    <div className="grid grid-cols-3 gap-3">
+                                    <div className="grid grid-cols-3 gap-[0.8rem]">
                                         <div>
-                                            <label className="mb-1 block text-xs text-zinc-500">
+                                            <label className="mb-[0.3rem] block text-[0.7rem] text-[#777]">
                                                 View Target
                                             </label>
                                             <input
@@ -298,13 +298,13 @@ export default function CreateOrder() {
                                                         e.target.value
                                                     )
                                                 }
-                                                className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                className="w-full rounded-[6px] border border-[#a0a0a0] bg-white px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#777] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
                                                 placeholder="e.g. 10000"
                                                 required
                                             />
                                         </div>
                                         <div>
-                                            <label className="mb-1 block text-xs text-zinc-500">
+                                            <label className="mb-[0.3rem] block text-[0.7rem] text-[#777]">
                                                 Payout (USDC)
                                             </label>
                                             <input
@@ -319,13 +319,13 @@ export default function CreateOrder() {
                                                         e.target.value
                                                     )
                                                 }
-                                                className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                className="w-full rounded-[6px] border border-[#a0a0a0] bg-white px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#777] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
                                                 placeholder="e.g. 100"
                                                 required
                                             />
                                         </div>
                                         <div>
-                                            <label className="mb-1 block text-xs text-zinc-500">
+                                            <label className="mb-[0.3rem] block text-[0.7rem] text-[#777]">
                                                 Deadline (days)
                                             </label>
                                             <input
@@ -339,7 +339,7 @@ export default function CreateOrder() {
                                                         e.target.value
                                                     )
                                                 }
-                                                className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                className="w-full rounded-[6px] border border-[#a0a0a0] bg-white px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#777] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
                                                 placeholder="e.g. 30"
                                                 required
                                             />
@@ -349,11 +349,11 @@ export default function CreateOrder() {
                             ))}
                         </div>
 
-                        <div className="mt-4 flex items-center justify-between rounded-lg bg-zinc-800 px-4 py-3">
-                            <span className="text-sm text-zinc-400">
+                        <div className="mt-[1rem] flex items-center justify-between rounded-[6px] bg-[#fff1f3] px-[1rem] py-[0.8rem]">
+                            <span className="text-[0.8rem] font-medium text-[#777]">
                                 Total Payout
                             </span>
-                            <span className="text-sm font-semibold text-zinc-100">
+                            <span className="text-[0.8rem] font-bold text-[#232323]">
                                 {totalMilestonePayout.toFixed(2)} USDC
                             </span>
                         </div>
@@ -362,13 +362,13 @@ export default function CreateOrder() {
 
                 {/* Linear Configuration */}
                 {paymentMode === "linear" && (
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                        <label className="mb-4 block text-sm font-medium text-zinc-300">
+                    <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                        <label className="mb-[1rem] block text-[0.8rem] font-medium text-[#232323]">
                             Linear Payment Configuration
                         </label>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-[1rem]">
                             <div>
-                                <label className="mb-1 block text-xs text-zinc-500">
+                                <label className="mb-[0.3rem] block text-[0.7rem] text-[#777]">
                                     Rate per View (USDC)
                                 </label>
                                 <input
@@ -379,13 +379,13 @@ export default function CreateOrder() {
                                     onChange={(e) =>
                                         setRatePerView(e.target.value)
                                     }
-                                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className="w-full rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#777] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
                                     placeholder="e.g. 0.001"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="mb-1 block text-xs text-zinc-500">
+                                <label className="mb-[0.3rem] block text-[0.7rem] text-[#777]">
                                     Total Cap (USDC)
                                 </label>
                                 <input
@@ -396,18 +396,18 @@ export default function CreateOrder() {
                                     onChange={(e) =>
                                         setTotalCap(e.target.value)
                                     }
-                                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className="w-full rounded-[6px] border border-[#a0a0a0] bg-[#f6f6f6] px-[1rem] py-[0.8rem] text-[0.8rem] text-[#232323] placeholder-[#777] focus:border-[#E62058] focus:outline-none focus:ring-1 focus:ring-[#E62058]"
                                     placeholder="e.g. 500"
                                     required
                                 />
                             </div>
                         </div>
-                        <div className="mt-4 rounded-lg bg-zinc-800 px-4 py-3">
-                            <p className="text-xs text-zinc-500">
+                        <div className="mt-[1rem] rounded-[6px] bg-[#fff1f3] px-[1rem] py-[0.8rem]">
+                            <p className="text-[0.7rem] text-[#777]">
                                 At {ratePerView} USDC per view with a{" "}
                                 {totalCap} USDC cap, the creator will be fully
                                 paid at{" "}
-                                <span className="font-medium text-zinc-300">
+                                <span className="font-bold text-[#232323]">
                                     {(
                                         parseFloat(totalCap) /
                                         parseFloat(ratePerView || "1")
@@ -421,16 +421,16 @@ export default function CreateOrder() {
                 )}
 
                 {/* Submit */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-[1rem]">
                     <button
                         type="submit"
                         disabled={isPending || isConfirming || !isConnected}
-                        className="inline-flex h-12 flex-1 items-center justify-center rounded-lg bg-blue-600 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex h-[3rem] flex-1 items-center justify-center rounded-[6px] bg-[#E62058] text-[0.8rem] font-bold text-white transition-all duration-200 hover:bg-[#c10f45] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         {isPending || isConfirming ? (
-                            <span className="flex items-center gap-2">
+                            <span className="flex items-center gap-[0.5rem]">
                                 <svg
-                                    className="h-4 w-4 animate-spin"
+                                    className="h-[1rem] w-[1rem] animate-spin"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                 >

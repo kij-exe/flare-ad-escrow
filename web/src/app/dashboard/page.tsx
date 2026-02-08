@@ -19,18 +19,18 @@ const STATUS_LABELS = [
 const MODE_LABELS = ["Milestone", "Linear"];
 
 const STATUS_COLORS: Record<number, string> = {
-    0: "bg-emerald-900/50 text-emerald-300 border border-emerald-800",
-    1: "bg-blue-900/50 text-blue-300 border border-blue-800",
-    2: "bg-amber-900/50 text-amber-300 border border-amber-800",
-    3: "bg-violet-900/50 text-violet-300 border border-violet-800",
-    4: "bg-zinc-800 text-zinc-400 border border-zinc-700",
-    5: "bg-red-900/50 text-red-300 border border-red-800",
+    0: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+    1: "bg-[#fff1f3] text-[#E62058] border border-[#ffccd5]",
+    2: "bg-amber-50 text-amber-700 border border-amber-200",
+    3: "bg-violet-50 text-violet-700 border border-violet-200",
+    4: "bg-[#f6f6f6] text-[#777] border border-[#c4c4c4]",
+    5: "bg-red-50 text-red-700 border border-red-200",
 };
 
 const APP_STATUS_COLORS: Record<string, string> = {
-    pending: "bg-amber-900/50 text-amber-300 border border-amber-800",
-    accepted: "bg-emerald-900/50 text-emerald-300 border border-emerald-800",
-    rejected: "bg-red-900/50 text-red-300 border border-red-800",
+    pending: "bg-amber-50 text-amber-700 border border-amber-200",
+    accepted: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+    rejected: "bg-red-50 text-red-700 border border-red-200",
 };
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -60,7 +60,6 @@ function DashboardDealCard({
 
     if (!deal) return null;
 
-    // Filter based on role
     if (role === "client" && deal.client.toLowerCase() !== userAddress.toLowerCase()) {
         return null;
     }
@@ -71,7 +70,6 @@ function DashboardDealCard({
     const status = Number(deal.status);
     const paymentMode = Number(deal.paymentMode);
 
-    // Calculate total payout
     let totalPayout = 0n;
     if (paymentMode === 0 && milestones) {
         totalPayout = (milestones as readonly { payoutAmount: bigint }[]).reduce(
@@ -80,7 +78,6 @@ function DashboardDealCard({
         );
     }
 
-    // Calculate milestone progress
     let paidCount = 0;
     let totalCount = 0;
     if (paymentMode === 0 && milestones) {
@@ -98,30 +95,30 @@ function DashboardDealCard({
 
     return (
         <Link href={`/order/${dealId}`}>
-            <div className="group rounded-xl border border-zinc-800 bg-zinc-900 p-5 transition-all hover:border-zinc-600 hover:bg-zinc-800/50 cursor-pointer">
-                <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-base font-semibold text-zinc-100">
+            <div className="group rounded-[10px] border border-[#c4c4c4] bg-white p-[1.2rem] transition-all duration-300 hover:border-[#a0a0a0] hover:shadow-lg hover:shadow-[#E62058]/5 hover:-translate-y-[10px] cursor-pointer">
+                <div className="flex items-center justify-between mb-[0.8rem]">
+                    <h3 className="text-[0.95rem] font-bold text-[#232323]">
                         Order #{dealId}
                     </h3>
                     <span
-                        className={`px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[status]}`}
+                        className={`px-[0.6rem] py-[0.2rem] rounded-full text-[0.6rem] font-bold ${STATUS_COLORS[status]}`}
                     >
                         {STATUS_LABELS[status]}
                     </span>
                 </div>
 
-                <div className="space-y-2 text-sm">
+                <div className="space-y-[0.4rem] text-[0.8rem]">
                     <div className="flex items-center justify-between">
-                        <span className="text-zinc-500">Mode</span>
-                        <span className="text-zinc-300">
+                        <span className="text-[#777]">Mode</span>
+                        <span className="text-[#232323] font-medium">
                             {MODE_LABELS[paymentMode]}
                         </span>
                     </div>
                     <div className="flex items-center justify-between">
-                        <span className="text-zinc-500">
+                        <span className="text-[#777]">
                             {role === "client" ? "Creator" : "Client"}
                         </span>
-                        <span className="font-mono text-xs text-zinc-400">
+                        <span className="font-mono text-[0.7rem] text-[#777]">
                             {counterparty === "Awaiting creator"
                                 ? counterparty
                                 : `${counterparty.slice(0, 6)}...${counterparty.slice(-4)}`}
@@ -129,25 +126,24 @@ function DashboardDealCard({
                     </div>
                     {deal.youtubeVideoId && (
                         <div className="flex items-center justify-between">
-                            <span className="text-zinc-500">Video</span>
-                            <span className="text-xs text-blue-400">
+                            <span className="text-[#777]">Video</span>
+                            <span className="text-[0.7rem] text-[#E62058]">
                                 {deal.youtubeVideoId}
                             </span>
                         </div>
                     )}
 
-                    {/* Milestone progress */}
                     {paymentMode === 0 && totalCount > 0 && (
-                        <div className="pt-2">
-                            <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
+                        <div className="pt-[0.4rem]">
+                            <div className="flex items-center justify-between text-[0.7rem] text-[#777] mb-[0.2rem]">
                                 <span>Milestone Progress</span>
                                 <span>
                                     {paidCount} / {totalCount}
                                 </span>
                             </div>
-                            <div className="h-1.5 rounded-full bg-zinc-800">
+                            <div className="h-[0.3rem] rounded-full bg-[#f6f6f6]">
                                 <div
-                                    className="h-1.5 rounded-full bg-blue-600 transition-all"
+                                    className="h-[0.3rem] rounded-full bg-[#E62058] transition-all"
                                     style={{
                                         width: `${(paidCount / totalCount) * 100}%`,
                                     }}
@@ -156,19 +152,18 @@ function DashboardDealCard({
                         </div>
                     )}
 
-                    {/* Payment progress for active deals */}
                     {deal.totalDeposited > 0n && (
-                        <div className="pt-2">
-                            <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
+                        <div className="pt-[0.4rem]">
+                            <div className="flex items-center justify-between text-[0.7rem] text-[#777] mb-[0.2rem]">
                                 <span>Payment</span>
                                 <span>
                                     {formatUnits(deal.totalPaid, 6)} /{" "}
                                     {formatUnits(deal.totalDeposited, 6)} USDC
                                 </span>
                             </div>
-                            <div className="h-1.5 rounded-full bg-zinc-800">
+                            <div className="h-[0.3rem] rounded-full bg-[#f6f6f6]">
                                 <div
-                                    className="h-1.5 rounded-full bg-emerald-600 transition-all"
+                                    className="h-[0.3rem] rounded-full bg-emerald-500 transition-all"
                                     style={{
                                         width: `${Math.min(100, (Number(deal.totalPaid) / Number(deal.totalDeposited)) * 100)}%`,
                                     }}
@@ -178,8 +173,8 @@ function DashboardDealCard({
                     )}
                 </div>
 
-                <div className="mt-3 pt-3 border-t border-zinc-800">
-                    <span className="text-xs text-zinc-500 group-hover:text-blue-400 transition-colors">
+                <div className="mt-[0.8rem] pt-[0.8rem] border-t border-[#c4c4c4]">
+                    <span className="text-[0.7rem] text-[#777] group-hover:text-[#E62058] transition-colors duration-200">
                         View details &rarr;
                     </span>
                 </div>
@@ -199,12 +194,12 @@ function DealsList({
 }) {
     if (dealCount === 0) {
         return (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 py-16">
-                <p className="text-zinc-500">No deals found</p>
+            <div className="flex flex-col items-center justify-center rounded-[10px] border border-dashed border-[#a0a0a0] py-[3.2rem]">
+                <p className="text-[#777]">No deals found</p>
                 {role === "client" && (
                     <Link
                         href="/create-order"
-                        className="mt-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                        className="mt-[0.4rem] text-[0.8rem] font-bold text-[#E62058] hover:text-[#c10f45] transition-colors duration-200"
                     >
                         Create your first order &rarr;
                     </Link>
@@ -212,7 +207,7 @@ function DealsList({
                 {role === "creator" && (
                     <Link
                         href="/marketplace"
-                        className="mt-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                        className="mt-[0.4rem] text-[0.8rem] font-bold text-[#E62058] hover:text-[#c10f45] transition-colors duration-200"
                     >
                         Browse the marketplace &rarr;
                     </Link>
@@ -222,7 +217,7 @@ function DealsList({
     }
 
     return (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-[1.2rem] md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: dealCount }, (_, i) => (
                 <DashboardDealCard
                     key={i}
@@ -250,14 +245,14 @@ function MyApplications({ address }: { address: string }) {
 
     if (isLoading) {
         return (
-            <div className="space-y-3">
+            <div className="space-y-[0.8rem]">
                 {[0, 1].map((i) => (
                     <div
                         key={i}
-                        className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 p-4"
+                        className="animate-pulse rounded-[10px] border border-[#c4c4c4] bg-white p-[1.2rem]"
                     >
-                        <div className="h-4 w-40 rounded bg-zinc-800" />
-                        <div className="mt-2 h-3 w-28 rounded bg-zinc-800" />
+                        <div className="h-[0.8rem] w-[8rem] rounded-[6px] bg-[#f6f6f6]" />
+                        <div className="mt-[0.4rem] h-[0.6rem] w-[5rem] rounded-[6px] bg-[#f6f6f6]" />
                     </div>
                 ))}
             </div>
@@ -266,11 +261,11 @@ function MyApplications({ address }: { address: string }) {
 
     if (pending.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 py-12">
-                <p className="text-zinc-500">No pending applications</p>
+            <div className="flex flex-col items-center justify-center rounded-[10px] border border-dashed border-[#a0a0a0] py-[2.4rem]">
+                <p className="text-[#777]">No pending applications</p>
                 <Link
                     href="/marketplace"
-                    className="mt-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                    className="mt-[0.4rem] text-[0.8rem] font-bold text-[#E62058] hover:text-[#c10f45] transition-colors duration-200"
                 >
                     Browse the marketplace &rarr;
                 </Link>
@@ -279,26 +274,26 @@ function MyApplications({ address }: { address: string }) {
     }
 
     return (
-        <div className="space-y-3">
+        <div className="space-y-[0.8rem]">
             {pending.map((app) => (
                 <Link key={app.id} href={`/order/${app.contract_deal_id}`}>
-                    <div className="group rounded-xl border border-zinc-800 bg-zinc-900 p-4 transition-all hover:border-zinc-600 hover:bg-zinc-800/50 cursor-pointer">
+                    <div className="group rounded-[10px] border border-[#c4c4c4] bg-white p-[1.2rem] transition-all duration-300 hover:border-[#a0a0a0] hover:shadow-lg hover:shadow-[#E62058]/5 hover:-translate-y-[10px] cursor-pointer">
                         <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-medium text-zinc-100">
+                            <h4 className="text-[0.8rem] font-bold text-[#232323]">
                                 Order #{app.contract_deal_id}
                             </h4>
                             <span
-                                className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${APP_STATUS_COLORS[app.status]}`}
+                                className={`px-[0.6rem] py-[0.1rem] rounded-full text-[0.6rem] font-bold ${APP_STATUS_COLORS[app.status]}`}
                             >
                                 {app.status}
                             </span>
                         </div>
                         {app.message && (
-                            <p className="mt-1.5 text-xs text-zinc-400 line-clamp-2">
+                            <p className="mt-[0.4rem] text-[0.7rem] text-[#777] line-clamp-2">
                                 {app.message}
                             </p>
                         )}
-                        <p className="mt-1 text-xs text-zinc-600">
+                        <p className="mt-[0.2rem] text-[0.7rem] text-[#a0a0a0]">
                             Applied {new Date(app.created_at).toLocaleDateString()}
                         </p>
                     </div>
@@ -322,10 +317,10 @@ export default function Dashboard() {
 
     if (!isConnected || !address) {
         return (
-            <div className="flex flex-col items-center justify-center py-20">
-                <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800">
+            <div className="flex flex-col items-center justify-center py-[4.8rem]">
+                <div className="mb-[1.6rem] flex h-[4rem] w-[4rem] items-center justify-center rounded-full bg-[#f6f6f6] border border-[#c4c4c4]">
                     <svg
-                        className="h-10 w-10 text-zinc-600"
+                        className="h-[2rem] w-[2rem] text-[#a0a0a0]"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
@@ -338,10 +333,10 @@ export default function Dashboard() {
                         />
                     </svg>
                 </div>
-                <h2 className="text-xl font-semibold text-zinc-200">
+                <h2 className="text-[1.4rem] font-bold text-[#232323]">
                     Connect Your Wallet
                 </h2>
-                <p className="mt-2 text-zinc-500">
+                <p className="mt-[0.4rem] text-[0.8rem] text-[#777]">
                     Connect your wallet to view your sponsorship deals
                 </p>
             </div>
@@ -350,41 +345,39 @@ export default function Dashboard() {
 
     return (
         <div>
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-zinc-50">Dashboard</h1>
-                <p className="mt-2 text-zinc-400">
+            <div className="mb-[2rem]">
+                <h1 className="text-[2.4rem] leading-[2.7rem] font-bold text-[#232323]">Dashboard</h1>
+                <p className="mt-[0.4rem] text-[0.95rem] text-[#777]">
                     {role === "creator"
                         ? "Your creator deals and applications"
                         : "Manage your sponsorship deals"}
                 </p>
             </div>
 
-            {/* My Applications (creator only) */}
             {role === "creator" && (
-                <div className="mb-8">
-                    <h2 className="mb-4 text-lg font-semibold text-zinc-100">
+                <div className="mb-[2rem]">
+                    <h2 className="mb-[1rem] text-[1.2rem] font-bold text-[#232323]">
                         My Applications
                     </h2>
                     <MyApplications address={address} />
                 </div>
             )}
 
-            {/* Deals */}
             <div>
-                <h2 className="mb-4 text-lg font-semibold text-zinc-100">
+                <h2 className="mb-[1rem] text-[1.2rem] font-bold text-[#232323]">
                     {role === "client" ? "My Orders" : "Accepted Deals"}
                 </h2>
                 {isLoading ? (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-[1.2rem] md:grid-cols-2 lg:grid-cols-3">
                         {[0, 1, 2].map((i) => (
                             <div
                                 key={i}
-                                className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 p-5"
+                                className="animate-pulse rounded-[10px] border border-[#c4c4c4] bg-white p-[1.2rem]"
                             >
-                                <div className="mb-3 h-5 w-28 rounded bg-zinc-800" />
-                                <div className="space-y-2">
-                                    <div className="h-4 w-40 rounded bg-zinc-800" />
-                                    <div className="h-4 w-36 rounded bg-zinc-800" />
+                                <div className="mb-[0.8rem] h-[1rem] w-[5rem] rounded-[6px] bg-[#f6f6f6]" />
+                                <div className="space-y-[0.4rem]">
+                                    <div className="h-[0.8rem] w-[8rem] rounded-[6px] bg-[#f6f6f6]" />
+                                    <div className="h-[0.8rem] w-[7rem] rounded-[6px] bg-[#f6f6f6]" />
                                 </div>
                             </div>
                         ))}

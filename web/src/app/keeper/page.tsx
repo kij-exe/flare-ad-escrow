@@ -160,9 +160,9 @@ function useKeeperAPI() {
 
 function ConnectionIndicator({ connected }: { connected: boolean }) {
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-[0.5rem]">
             <div className={`h-2.5 w-2.5 rounded-full ${connected ? "bg-emerald-500" : "bg-red-500"} ${connected ? "animate-pulse" : ""}`} />
-            <span className="text-xs text-zinc-400">{connected ? "Connected" : "Disconnected"}</span>
+            <span className="text-[0.7rem] text-[#777]">{connected ? "Connected" : "Disconnected"}</span>
         </div>
     );
 }
@@ -175,18 +175,18 @@ function StepIndicator({ check }: { check: CheckState }) {
     return (
         <div className="flex items-center gap-1">
             {CHECK_STEPS.map((step, i) => {
-                let color = "bg-zinc-700 text-zinc-500"; // pending
+                let color = "bg-[#f6f6f6] text-[#a0a0a0]"; // pending
                 if (isDone || i < currentIndex) {
-                    color = "bg-emerald-900/50 text-emerald-400";
+                    color = "bg-emerald-50 text-emerald-600";
                 } else if (isFailed && i <= currentIndex) {
-                    color = "bg-red-900/50 text-red-400";
+                    color = "bg-red-50 text-red-600";
                 } else if (i === currentIndex) {
-                    color = "bg-blue-900/50 text-blue-300";
+                    color = "bg-[#fff1f3] text-[#E62058]";
                 }
 
                 return (
                     <div key={step.key} className="flex items-center gap-1">
-                        <div className={`px-2 py-0.5 rounded text-xs font-medium ${color}`}>
+                        <div className={`px-2 py-0.5 rounded-[6px] text-[0.6rem] font-bold ${color}`}>
                             {isDone && i <= currentIndex
                                 ? "\u2713"
                                 : isFailed && i === currentIndex
@@ -196,7 +196,7 @@ function StepIndicator({ check }: { check: CheckState }) {
                                     : "\u25CB"}{" "}
                             {step.label}
                         </div>
-                        {i < CHECK_STEPS.length - 1 && <span className="text-zinc-700">&rarr;</span>}
+                        {i < CHECK_STEPS.length - 1 && <span className="text-[#a0a0a0]">&rarr;</span>}
                     </div>
                 );
             })}
@@ -208,26 +208,26 @@ function ActiveCheckCard({ check }: { check: CheckState }) {
     const elapsed = Math.round((Date.now() - check.startedAt) / 1000);
 
     return (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-            <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                    <h3 className="text-sm font-semibold text-zinc-100">Deal #{check.dealId}</h3>
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${check.type === "viewcount" ? "bg-blue-900/50 text-blue-300 border border-blue-800" : "bg-amber-900/50 text-amber-300 border border-amber-800"}`}>
+        <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.2rem]">
+            <div className="flex items-center justify-between mb-[0.8rem]">
+                <div className="flex items-center gap-[0.8rem]">
+                    <h3 className="text-[0.8rem] font-bold text-[#232323]">Deal #{check.dealId}</h3>
+                    <span className={`px-2 py-0.5 rounded-full text-[0.6rem] font-bold ${check.type === "viewcount" ? "bg-[#fff1f3] text-[#E62058] border border-[#ffccd5]" : "bg-amber-50 text-amber-700 border border-amber-200"}`}>
                         {check.type === "viewcount" ? "View Count" : "Etag"}
                     </span>
                 </div>
-                <span className="text-xs text-zinc-500">{elapsed}s elapsed</span>
+                <span className="text-[0.7rem] text-[#a0a0a0]">{elapsed}s elapsed</span>
             </div>
 
             <StepIndicator check={check} />
 
             {check.roundId && (
-                <div className="mt-2">
+                <div className="mt-[0.5rem]">
                     <a
                         href={`https://coston2-systems-explorer.flare.rocks/voting-round/${check.roundId}?tab=fdc`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                        className="text-[0.7rem] text-[#E62058] hover:text-[#c10f45] transition-all duration-200"
                     >
                         View Round {check.roundId} on Explorer &nearr;
                     </a>
@@ -235,7 +235,7 @@ function ActiveCheckCard({ check }: { check: CheckState }) {
             )}
 
             {check.result?.message && (
-                <p className="mt-2 text-xs text-zinc-400">{check.result.message}</p>
+                <p className="mt-[0.5rem] text-[0.7rem] text-[#777]">{check.result.message}</p>
             )}
         </div>
     );
@@ -247,28 +247,28 @@ function CompletedCheckRow({ check }: { check: CheckState }) {
     const isFailed = check.status === "failed";
 
     return (
-        <div className={`flex items-center justify-between py-3 border-b border-zinc-800/50 last:border-0 ${isFailed ? "opacity-75" : ""}`}>
-            <div className="flex items-center gap-3">
+        <div className={`flex items-center justify-between py-[0.8rem] border-b border-[#c4c4c4] last:border-0 ${isFailed ? "opacity-75" : ""}`}>
+            <div className="flex items-center gap-[0.8rem]">
                 <span className={`h-2 w-2 rounded-full ${isFailed ? "bg-red-500" : "bg-emerald-500"}`} />
-                <span className="text-sm text-zinc-200">Deal #{check.dealId}</span>
-                <span className={`px-2 py-0.5 rounded text-xs ${check.type === "viewcount" ? "bg-blue-900/30 text-blue-400" : "bg-amber-900/30 text-amber-400"}`}>
+                <span className="text-[0.8rem] text-[#232323]">Deal #{check.dealId}</span>
+                <span className={`px-2 py-0.5 rounded-[6px] text-[0.6rem] font-bold ${check.type === "viewcount" ? "bg-[#fff1f3] text-[#E62058]" : "bg-amber-50 text-amber-700"}`}>
                     {check.type}
                 </span>
             </div>
-            <div className="flex items-center gap-4">
-                <span className="text-xs text-zinc-400">{check.result?.message || check.error}</span>
+            <div className="flex items-center gap-[1rem]">
+                <span className="text-[0.7rem] text-[#777]">{check.result?.message || check.error}</span>
                 {check.result?.txHash && (
                     <a
                         href={`https://coston2-explorer.flare.network/tx/${check.result.txHash}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-400 hover:text-blue-300"
+                        className="text-[0.7rem] text-[#E62058] hover:text-[#c10f45] transition-all duration-200"
                     >
                         TX &nearr;
                     </a>
                 )}
-                <span className="text-xs text-zinc-500">{duration}s</span>
-                <span className="text-xs text-zinc-600">{time}</span>
+                <span className="text-[0.7rem] text-[#a0a0a0]">{duration}s</span>
+                <span className="text-[0.7rem] text-[#a0a0a0]">{time}</span>
             </div>
         </div>
     );
@@ -291,33 +291,33 @@ function DealCard({ dealId, api }: { dealId: number; api: ReturnType<typeof useK
     const paymentMode = Number(deal.paymentMode);
 
     return (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-            <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-semibold text-zinc-100">Deal #{dealId}</h3>
-                    <span className="px-2 py-0.5 rounded-full text-xs bg-violet-900/50 text-violet-300 border border-violet-800">
+        <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.2rem]">
+            <div className="flex items-center justify-between mb-[0.8rem]">
+                <div className="flex items-center gap-[0.5rem]">
+                    <h3 className="text-[0.8rem] font-bold text-[#232323]">Deal #{dealId}</h3>
+                    <span className="px-2 py-0.5 rounded-full text-[0.6rem] font-bold bg-violet-50 text-violet-700 border border-violet-200">
                         {STATUS_LABELS[status]}
                     </span>
                 </div>
-                <span className={`text-xs px-2 py-0.5 rounded ${paymentMode === 0 ? "bg-blue-900/30 text-blue-400" : "bg-violet-900/30 text-violet-400"}`}>
+                <span className={`text-[0.6rem] font-bold px-2 py-0.5 rounded-[6px] ${paymentMode === 0 ? "bg-[#fff1f3] text-[#E62058]" : "bg-violet-50 text-violet-700"}`}>
                     {MODE_LABELS[paymentMode]}
                 </span>
             </div>
 
             {deal.youtubeVideoId && (
-                <p className="text-xs text-zinc-400 mb-3">Video: {deal.youtubeVideoId}</p>
+                <p className="text-[0.7rem] text-[#777] mb-[0.8rem]">Video: {deal.youtubeVideoId}</p>
             )}
 
-            <div className="flex gap-2">
+            <div className="flex gap-[0.5rem]">
                 <button
                     onClick={() => api.checkDeal(dealId)}
-                    className="px-3 py-1.5 rounded-lg bg-blue-600 text-xs font-medium text-white hover:bg-blue-500 transition-colors"
+                    className="px-[1rem] py-[0.5rem] rounded-[6px] bg-[#E62058] text-[0.7rem] font-bold text-white hover:bg-[#c10f45] active:scale-95 transition-all duration-200"
                 >
                     Run Check
                 </button>
                 <button
                     onClick={() => api.checkEtag(dealId)}
-                    className="px-3 py-1.5 rounded-lg bg-zinc-800 text-xs font-medium text-zinc-300 hover:bg-zinc-700 border border-zinc-700 transition-colors"
+                    className="px-[1rem] py-[0.5rem] rounded-[6px] bg-[#f6f6f6] text-[0.7rem] font-bold text-[#232323] hover:bg-[#ffe4e8] border border-[#a0a0a0] transition-all duration-200"
                 >
                     Check Etag
                 </button>
@@ -353,51 +353,51 @@ function ConfigPanel({
     };
 
     return (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
-            <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-semibold text-zinc-100">Configuration</h2>
-                <div className="flex items-center gap-2">
-                    <span className="text-xs text-zinc-500">Cycle: {cycleCount}</span>
+        <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+            <div className="flex items-center justify-between mb-[1.2rem]">
+                <h2 className="text-[1.2rem] font-bold text-[#232323]">Configuration</h2>
+                <div className="flex items-center gap-[0.5rem]">
+                    <span className="text-[0.7rem] text-[#a0a0a0]">Cycle: {cycleCount}</span>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-[1.2rem]">
                 <div>
-                    <label className="block text-xs text-zinc-500 mb-1">Poll Interval (min)</label>
+                    <label className="block text-[0.7rem] text-[#777] mb-[0.3rem]">Poll Interval (min)</label>
                     <input
                         type="number"
                         min="1"
                         value={pollMinutes}
                         onChange={(e) => setPollMinutes(e.target.value)}
                         onBlur={saveConfig}
-                        className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-blue-600"
+                        className="w-full rounded-[6px] bg-[#f6f6f6] border border-[#a0a0a0] px-[0.8rem] py-[0.5rem] text-[0.8rem] text-[#232323] focus:outline-none focus:border-[#E62058]"
                     />
                 </div>
                 <div>
-                    <label className="block text-xs text-zinc-500 mb-1">Etag Check Every N Cycles</label>
+                    <label className="block text-[0.7rem] text-[#777] mb-[0.3rem]">Etag Check Every N Cycles</label>
                     <input
                         type="number"
                         min="1"
                         value={etagCycle}
                         onChange={(e) => setEtagCycle(e.target.value)}
                         onBlur={saveConfig}
-                        className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-blue-600"
+                        className="w-full rounded-[6px] bg-[#f6f6f6] border border-[#a0a0a0] px-[0.8rem] py-[0.5rem] text-[0.8rem] text-[#232323] focus:outline-none focus:border-[#E62058]"
                     />
                 </div>
-                <div className="flex items-end gap-2">
+                <div className="flex items-end gap-[0.5rem]">
                     <button
                         onClick={() => api.togglePolling()}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        className={`px-[1rem] py-[0.5rem] rounded-[6px] text-[0.7rem] font-bold transition-all duration-200 ${
                             isPolling
-                                ? "bg-red-900/50 text-red-300 border border-red-800 hover:bg-red-900/80"
-                                : "bg-emerald-900/50 text-emerald-300 border border-emerald-800 hover:bg-emerald-900/80"
+                                ? "bg-red-50 text-red-700 border border-red-200 hover:bg-red-100"
+                                : "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
                         }`}
                     >
                         {isPolling ? "Stop Polling" : "Start Polling"}
                     </button>
                     <button
                         onClick={() => api.checkAll()}
-                        className="px-4 py-2 rounded-lg bg-blue-600 text-sm font-medium text-white hover:bg-blue-500 transition-colors"
+                        className="px-[1rem] py-[0.5rem] rounded-[6px] bg-[#E62058] text-[0.7rem] font-bold text-white hover:bg-[#c10f45] active:scale-95 transition-all duration-200"
                     >
                         Check All Now
                     </button>
@@ -427,19 +427,19 @@ export default function KeeperPage() {
     return (
         <div>
             {/* Header */}
-            <div className="mb-8 flex items-center justify-between">
+            <div className="mb-[1.6rem] flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-zinc-50">Keeper Dashboard</h1>
-                    <p className="mt-2 text-zinc-400">Monitor and control the FDC keeper bot</p>
+                    <h1 className="text-[2.4rem] leading-[2.7rem] font-bold text-[#232323]">Keeper Dashboard</h1>
+                    <p className="mt-[0.5rem] text-[0.8rem] text-[#777]">Monitor and control the FDC keeper bot</p>
                 </div>
                 <ConnectionIndicator connected={connected} />
             </div>
 
             {!connected && (
-                <div className="mb-6 rounded-xl border border-amber-800/50 bg-amber-900/20 p-4">
-                    <p className="text-sm text-amber-300">
+                <div className="mb-[1.6rem] rounded-[10px] border border-amber-200 bg-amber-50 p-[1.2rem]">
+                    <p className="text-[0.8rem] text-amber-700">
                         Not connected to keeper server. Start it with:{" "}
-                        <code className="bg-zinc-800 px-2 py-0.5 rounded text-xs">
+                        <code className="bg-[#f6f6f6] px-[0.5rem] py-[0.15rem] rounded-[6px] text-[0.7rem]">
                             yarn hardhat run scripts/trusttube/keeper/server.ts --network coston2
                         </code>
                     </p>
@@ -448,7 +448,7 @@ export default function KeeperPage() {
 
             {/* Configuration */}
             {state && (
-                <div className="mb-6">
+                <div className="mb-[1.6rem]">
                     <ConfigPanel
                         config={state.config}
                         isPolling={state.isPolling}
@@ -459,14 +459,14 @@ export default function KeeperPage() {
             )}
 
             {/* Active Deals */}
-            <div className="mb-6">
-                <h2 className="text-lg font-semibold text-zinc-100 mb-4">Active Deals</h2>
+            <div className="mb-[1.6rem]">
+                <h2 className="text-[1.2rem] font-bold text-[#232323] mb-[1.2rem]">Active Deals</h2>
                 {dealCount === 0 ? (
-                    <div className="rounded-xl border border-dashed border-zinc-800 py-12 flex flex-col items-center">
-                        <p className="text-zinc-500">No deals found on-chain</p>
+                    <div className="rounded-[10px] border border-dashed border-[#c4c4c4] py-[3rem] flex flex-col items-center">
+                        <p className="text-[0.8rem] text-[#a0a0a0]">No deals found on-chain</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-[1.2rem] md:grid-cols-2 lg:grid-cols-3">
                         {Array.from({ length: dealCount }, (_, i) => (
                             <DealCard key={i} dealId={i} api={api} />
                         ))}
@@ -476,11 +476,11 @@ export default function KeeperPage() {
 
             {/* Running Checks */}
             {activeChecks.length > 0 && (
-                <div className="mb-6">
-                    <h2 className="text-lg font-semibold text-zinc-100 mb-4">
+                <div className="mb-[1.6rem]">
+                    <h2 className="text-[1.2rem] font-bold text-[#232323] mb-[1.2rem]">
                         Running Checks ({activeChecks.length})
                     </h2>
-                    <div className="space-y-3">
+                    <div className="space-y-[0.8rem]">
                         {activeChecks.map((check) => (
                             <ActiveCheckCard key={check.id} check={check} />
                         ))}
@@ -490,15 +490,15 @@ export default function KeeperPage() {
 
             {/* Completed Checks */}
             <div>
-                <h2 className="text-lg font-semibold text-zinc-100 mb-4">
+                <h2 className="text-[1.2rem] font-bold text-[#232323] mb-[1.2rem]">
                     Recent Checks {completedChecks.length > 0 && `(${completedChecks.length})`}
                 </h2>
                 {completedChecks.length === 0 ? (
-                    <div className="rounded-xl border border-dashed border-zinc-800 py-12 flex flex-col items-center">
-                        <p className="text-zinc-500">No completed checks yet</p>
+                    <div className="rounded-[10px] border border-dashed border-[#c4c4c4] py-[3rem] flex flex-col items-center">
+                        <p className="text-[0.8rem] text-[#a0a0a0]">No completed checks yet</p>
                     </div>
                 ) : (
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+                    <div className="rounded-[10px] border border-[#c4c4c4] bg-white p-[1.2rem]">
                         {completedChecks.map((check) => (
                             <CompletedCheckRow key={check.id} check={check} />
                         ))}

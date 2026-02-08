@@ -19,12 +19,12 @@ const STATUS_LABELS = [
 const MODE_LABELS = ["Milestone", "Linear"];
 
 const STATUS_COLORS: Record<number, string> = {
-    0: "bg-emerald-900/50 text-emerald-300 border border-emerald-800",
-    1: "bg-blue-900/50 text-blue-300 border border-blue-800",
-    2: "bg-amber-900/50 text-amber-300 border border-amber-800",
-    3: "bg-violet-900/50 text-violet-300 border border-violet-800",
-    4: "bg-zinc-800 text-zinc-400 border border-zinc-700",
-    5: "bg-red-900/50 text-red-300 border border-red-800",
+    0: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+    1: "bg-[#fff1f3] text-[#E62058] border border-[#ffccd5]",
+    2: "bg-amber-50 text-amber-700 border border-amber-200",
+    3: "bg-violet-50 text-violet-700 border border-violet-200",
+    4: "bg-[#f6f6f6] text-[#777] border border-[#c4c4c4]",
+    5: "bg-red-50 text-red-700 border border-red-200",
 };
 
 function DealCard({ dealId, appCount }: { dealId: number; appCount?: number }) {
@@ -52,12 +52,12 @@ function DealCard({ dealId, appCount }: { dealId: number; appCount?: number }) {
 
     if (!deal) {
         return (
-            <div className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                <div className="mb-4 h-6 w-32 rounded bg-zinc-800" />
-                <div className="space-y-3">
-                    <div className="h-4 w-48 rounded bg-zinc-800" />
-                    <div className="h-4 w-40 rounded bg-zinc-800" />
-                    <div className="h-4 w-36 rounded bg-zinc-800" />
+            <div className="animate-pulse rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]">
+                <div className="mb-[1rem] h-[1.2rem] w-[6rem] rounded-[6px] bg-[#f6f6f6]" />
+                <div className="space-y-[0.6rem]">
+                    <div className="h-[0.8rem] w-[10rem] rounded-[6px] bg-[#f6f6f6]" />
+                    <div className="h-[0.8rem] w-[8rem] rounded-[6px] bg-[#f6f6f6]" />
+                    <div className="h-[0.8rem] w-[7rem] rounded-[6px] bg-[#f6f6f6]" />
                 </div>
             </div>
         );
@@ -66,7 +66,6 @@ function DealCard({ dealId, appCount }: { dealId: number; appCount?: number }) {
     const status = Number(deal.status);
     const paymentMode = Number(deal.paymentMode);
 
-    // Calculate total payout for display
     let totalPayout = "0";
     if (paymentMode === 0 && milestones) {
         const total = (milestones as readonly { payoutAmount: bigint }[]).reduce(
@@ -83,58 +82,58 @@ function DealCard({ dealId, appCount }: { dealId: number; appCount?: number }) {
 
     return (
         <Link href={`/order/${dealId}`}>
-            <div className="group rounded-xl border border-zinc-800 bg-zinc-900 p-6 transition-all hover:border-zinc-600 hover:bg-zinc-800/50 cursor-pointer">
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-zinc-100">
+            <div className="group rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem] transition-all duration-300 hover:border-[#a0a0a0] hover:shadow-lg hover:shadow-[#E62058]/5 hover:-translate-y-[10px] cursor-pointer">
+                <div className="flex items-center justify-between mb-[1rem]">
+                    <h3 className="text-[1.1rem] font-bold text-[#232323]">
                         Order #{dealId}
                     </h3>
                     <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[status] || STATUS_COLORS[0]}`}
+                        className={`px-[0.6rem] py-[0.2rem] rounded-full text-[0.6rem] font-bold ${STATUS_COLORS[status] || STATUS_COLORS[0]}`}
                     >
                         {STATUS_LABELS[status]}
                     </span>
                 </div>
-                <div className="space-y-3 text-sm">
+                <div className="space-y-[0.6rem] text-[0.8rem]">
                     <div className="flex items-center justify-between">
-                        <span className="text-zinc-500">Payment Mode</span>
-                        <span className="flex items-center gap-1.5 text-zinc-200">
+                        <span className="text-[#777]">Payment Mode</span>
+                        <span className="flex items-center gap-[0.4rem] text-[#232323] font-medium">
                             <span
-                                className={`inline-block h-2 w-2 rounded-full ${paymentMode === 0 ? "bg-blue-500" : "bg-violet-500"}`}
+                                className={`inline-block h-[0.4rem] w-[0.4rem] rounded-full ${paymentMode === 0 ? "bg-[#E62058]" : "bg-violet-500"}`}
                             />
                             {MODE_LABELS[paymentMode]}
                         </span>
                     </div>
                     <div className="flex items-center justify-between">
-                        <span className="text-zinc-500">Total Budget</span>
-                        <span className="font-medium text-zinc-200">
+                        <span className="text-[#777]">Total Budget</span>
+                        <span className="font-bold text-[#232323]">
                             {totalPayout} USDC
                         </span>
                     </div>
                     <div className="flex items-center justify-between">
-                        <span className="text-zinc-500">Client</span>
-                        <span className="font-mono text-xs text-zinc-400">
+                        <span className="text-[#777]">Client</span>
+                        <span className="font-mono text-[0.7rem] text-[#777]">
                             {deal.client.slice(0, 6)}...{deal.client.slice(-4)}
                         </span>
                     </div>
                     {paymentMode === 0 && milestones && (
                         <div className="flex items-center justify-between">
-                            <span className="text-zinc-500">Milestones</span>
-                            <span className="text-zinc-200">
+                            <span className="text-[#777]">Milestones</span>
+                            <span className="text-[#232323] font-medium">
                                 {(milestones as readonly unknown[]).length} targets
                             </span>
                         </div>
                     )}
                     {role === "creator" && status === 0 && appCount !== undefined && appCount > 0 && (
                         <div className="flex items-center justify-between">
-                            <span className="text-zinc-500">Applications</span>
-                            <span className="rounded-full bg-blue-900/50 border border-blue-800 px-2.5 py-0.5 text-xs font-medium text-blue-300">
+                            <span className="text-[#777]">Applications</span>
+                            <span className="rounded-full bg-[#fff1f3] border border-[#ffccd5] px-[0.6rem] py-[0.1rem] text-[0.6rem] font-bold text-[#E62058]">
                                 {appCount}
                             </span>
                         </div>
                     )}
                 </div>
-                <div className="mt-4 pt-4 border-t border-zinc-800">
-                    <span className="text-xs text-zinc-500 group-hover:text-blue-400 transition-colors">
+                <div className="mt-[1rem] pt-[1rem] border-t border-[#c4c4c4]">
+                    <span className="text-[0.7rem] text-[#777] group-hover:text-[#E62058] transition-colors duration-200">
                         View details &rarr;
                     </span>
                 </div>
@@ -167,12 +166,12 @@ export default function Marketplace() {
 
     return (
         <div>
-            <div className="mb-8 flex items-end justify-between">
+            <div className="mb-[2rem] flex items-end justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-zinc-50">
+                    <h1 className="text-[2.4rem] leading-[2.7rem] font-bold text-[#232323]">
                         Marketplace
                     </h1>
-                    <p className="mt-2 text-zinc-400">
+                    <p className="mt-[0.4rem] text-[0.95rem] text-[#777]">
                         {role === "creator"
                             ? "Find sponsorship opportunities from clients"
                             : "Browse open sponsorship orders from clients looking for YouTube creators"}
@@ -181,7 +180,7 @@ export default function Marketplace() {
                 {role === "client" && (
                     <Link
                         href="/create-order"
-                        className="hidden sm:inline-flex h-10 items-center justify-center rounded-lg bg-blue-600 px-5 text-sm font-medium text-white transition-colors hover:bg-blue-500"
+                        className="hidden sm:inline-flex h-[2.4rem] items-center justify-center rounded-[10px] bg-[#E62058] px-[1.2rem] text-[0.8rem] font-bold text-white transition-all hover:bg-[#c10f45] active:scale-95 duration-200"
                     >
                         + New Order
                     </Link>
@@ -189,25 +188,25 @@ export default function Marketplace() {
             </div>
 
             {isLoading ? (
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-[1.2rem] md:grid-cols-2 lg:grid-cols-3">
                     {[0, 1, 2].map((i) => (
                         <div
                             key={i}
-                            className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 p-6"
+                            className="animate-pulse rounded-[10px] border border-[#c4c4c4] bg-white p-[1.6rem]"
                         >
-                            <div className="mb-4 h-6 w-32 rounded bg-zinc-800" />
-                            <div className="space-y-3">
-                                <div className="h-4 w-48 rounded bg-zinc-800" />
-                                <div className="h-4 w-40 rounded bg-zinc-800" />
+                            <div className="mb-[1rem] h-[1.2rem] w-[6rem] rounded-[6px] bg-[#f6f6f6]" />
+                            <div className="space-y-[0.6rem]">
+                                <div className="h-[0.8rem] w-[10rem] rounded-[6px] bg-[#f6f6f6]" />
+                                <div className="h-[0.8rem] w-[8rem] rounded-[6px] bg-[#f6f6f6]" />
                             </div>
                         </div>
                     ))}
                 </div>
             ) : dealCount === 0 ? (
-                <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 py-20">
-                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-zinc-900">
+                <div className="flex flex-col items-center justify-center rounded-[10px] border border-dashed border-[#a0a0a0] py-[4.8rem]">
+                    <div className="mb-[1rem] flex h-[3.2rem] w-[3.2rem] items-center justify-center rounded-full bg-[#f6f6f6]">
                         <svg
-                            className="h-8 w-8 text-zinc-600"
+                            className="h-[1.6rem] w-[1.6rem] text-[#a0a0a0]"
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
@@ -220,10 +219,10 @@ export default function Marketplace() {
                             />
                         </svg>
                     </div>
-                    <p className="text-lg font-medium text-zinc-400">
+                    <p className="text-[1rem] font-bold text-[#777]">
                         No orders yet
                     </p>
-                    <p className="mt-1 text-sm text-zinc-500">
+                    <p className="mt-[0.2rem] text-[0.8rem] text-[#a0a0a0]">
                         {role === "creator"
                             ? "No sponsorship opportunities available yet"
                             : "Be the first to create a sponsorship order"}
@@ -231,14 +230,14 @@ export default function Marketplace() {
                     {role === "client" && (
                         <Link
                             href="/create-order"
-                            className="mt-4 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                            className="mt-[1rem] text-[0.8rem] font-bold text-[#E62058] hover:text-[#c10f45] transition-colors duration-200"
                         >
                             Create the first order &rarr;
                         </Link>
                     )}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-[1.2rem] md:grid-cols-2 lg:grid-cols-3">
                     {Array.from({ length: dealCount }, (_, i) => (
                         <DealCard key={i} dealId={i} appCount={appCounts[i]} />
                     ))}
