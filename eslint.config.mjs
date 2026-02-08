@@ -10,7 +10,7 @@ const gitignorePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)),
 export default [
     includeIgnoreFile(gitignorePath),
     {
-        ignores: ["web/**"],
+        ignores: ["web/**", "worker/**"],
     },
     ...defaultConfig,
     prettier,

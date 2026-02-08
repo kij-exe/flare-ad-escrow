@@ -2,7 +2,7 @@ import { prepareAttestationRequestBase, submitAttestationRequest, retrieveDataAn
 
 // ─── Configuration ──────────────────────────────────────────
 
-const { VERIFIER_URL_TESTNET, VERIFIER_API_KEY_TESTNET, COSTON2_DA_LAYER_URL, YOUTUBE_API_KEY } = process.env;
+const { VERIFIER_URL_TESTNET, VERIFIER_API_KEY_TESTNET, COSTON2_DA_LAYER_URL, WORKER_URL } = process.env;
 
 const attestationTypeBase = "Web2Json";
 const sourceIdBase = "PublicWeb2";
@@ -17,20 +17,19 @@ const etagAbiSignature = `{"components": [{"internalType": "string", "name": "vi
 
 /**
  * Build a Web2Json request body for YouTube video statistics (view count).
+ *
+ * Uses the Cloudflare Worker proxy (WORKER_URL) because googleapis.com
+ * is unreachable from the FDC verifier infrastructure.
+ * Query params must be passed via the `queryParams` field (not embedded in the URL).
  */
 export function prepareViewCountAttestation(videoId: string) {
-    const apiUrl = "https://www.googleapis.com/youtube/v3/videos";
-    const postProcessJq = `.items[0] | {videoId: .id, viewCount: (.statistics.viewCount | tonumber)}`;
+    const postProcessJq = `{videoId: .videoId, viewCount: .viewCount}`;
 
     return {
-        url: apiUrl,
+        url: WORKER_URL,
         httpMethod: "GET",
-        headers: JSON.stringify({ "Content-Type": "application/json" }),
-        queryParams: JSON.stringify({
-            id: videoId,
-            part: "statistics",
-            key: YOUTUBE_API_KEY,
-        }),
+        headers: "{}",
+        queryParams: JSON.stringify({ videoId }),
         body: "{}",
         postProcessJq: postProcessJq,
         abiSignature: viewCountAbiSignature,
@@ -38,21 +37,19 @@ export function prepareViewCountAttestation(videoId: string) {
 }
 
 /**
- * Build a Web2Json request body for YouTube video snippet (etag).
+ * Build a Web2Json request body for YouTube video etag.
+ *
+ * Uses the Cloudflare Worker proxy which returns the etag field
+ * from the YouTube Data API v3 response.
  */
 export function prepareEtagAttestation(videoId: string) {
-    const apiUrl = "https://www.googleapis.com/youtube/v3/videos";
-    const postProcessJq = `.items[0] | {videoId: .id, etag: .etag}`;
+    const postProcessJq = `{videoId: .videoId, etag: .etag}`;
 
     return {
-        url: apiUrl,
+        url: WORKER_URL,
         httpMethod: "GET",
-        headers: JSON.stringify({ "Content-Type": "application/json" }),
-        queryParams: JSON.stringify({
-            id: videoId,
-            part: "snippet",
-            key: YOUTUBE_API_KEY,
-        }),
+        headers: "{}",
+        queryParams: JSON.stringify({ videoId }),
         body: "{}",
         postProcessJq: postProcessJq,
         abiSignature: etagAbiSignature,
@@ -108,30 +105,30 @@ export async function submitAndRetrieveProof(requestBody: any) {
 // ─── Off-chain Quick Check ─────────────────────────────────
 
 /**
- * Quick off-chain YouTube API call to check the current view count
- * for a video without going through FDC. Used to decide whether
- * a milestone has been reached before incurring attestation costs.
+ * Quick off-chain call to check the current view count for a video
+ * without going through FDC. Uses the same Cloudflare Worker proxy
+ * so no YouTube API key is needed in the keeper .env.
  *
  * @param videoId YouTube video ID
  * @returns Current view count as a number, or 0 on failure
  */
 export async function checkViewCountOffChain(videoId: string): Promise<number> {
-    const url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=statistics&key=${YOUTUBE_API_KEY}`;
+    const url = `${WORKER_URL}?videoId=${encodeURIComponent(videoId)}`;
 
     try {
         const response = await fetch(url);
         if (!response.ok) {
-            console.log(`YouTube API returned status ${response.status} for video ${videoId}`);
+            console.log(`Worker returned status ${response.status} for video ${videoId}`);
             return 0;
         }
 
         const json = await response.json();
-        if (!json.items || json.items.length === 0) {
-            console.log(`No items found for video ${videoId}`);
+        if (json.error) {
+            console.log(`Worker error for video ${videoId}: ${json.error}`);
             return 0;
         }
 
-        const viewCount = parseInt(json.items[0].statistics.viewCount, 10);
+        const viewCount = json.viewCount;
         console.log(`Off-chain view count for ${videoId}: ${viewCount}`);
         return viewCount;
     } catch (error) {
