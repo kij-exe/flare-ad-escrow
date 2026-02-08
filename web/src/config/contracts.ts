@@ -67,6 +67,23 @@ export const TRUSTTUBE_ABI = [
         type: "function",
     },
     {
+        inputs: [
+            { internalType: "uint256", name: "dealId", type: "uint256" },
+            { internalType: "uint256", name: "milestoneIndex", type: "uint256" },
+        ],
+        name: "claimMilestone",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [{ internalType: "uint256", name: "dealId", type: "uint256" }],
+        name: "claimLinear",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
         inputs: [{ internalType: "uint256", name: "dealId", type: "uint256" }],
         name: "getDeal",
         outputs: [
@@ -83,6 +100,7 @@ export const TRUSTTUBE_ABI = [
                     { internalType: "uint256", name: "videoDeadline", type: "uint256" },
                     { internalType: "uint256", name: "totalDeposited", type: "uint256" },
                     { internalType: "uint256", name: "totalPaid", type: "uint256" },
+                    { internalType: "uint256", name: "lastVerifiedViews", type: "uint256" },
                 ],
                 internalType: "struct TrustTube.Deal",
                 name: "",

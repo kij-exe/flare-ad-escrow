@@ -81,103 +81,30 @@ async function getActiveDeals(trustTube: any): Promise<any[]> {
 // ─── Milestone Processing ───────────────────────────────────
 
 /**
- * For a Milestone-mode deal, check each unpaid milestone.
- * If the off-chain view count meets the target, submit an FDC
- * attestation and call claimMilestone on-chain.
+ * For any active deal, check if the off-chain view count is higher
+ * than the on-chain lastVerifiedViews. If so, submit an FDC
+ * attestation and call updateViews on-chain.
  */
-async function processMilestoneDeal(trustTube: any, deal: any) {
+async function updateViewsForDeal(trustTube: any, deal: any) {
     const dealId = Number(deal.id);
     const videoId = deal.youtubeVideoId;
+    const lastVerified = Number(deal.lastVerifiedViews);
 
-    console.log(`Processing milestone deal #${dealId} (video: ${videoId})...\n`);
+    console.log(`Checking views for deal #${dealId} (video: ${videoId}, last verified: ${lastVerified})...\n`);
 
-    // Quick off-chain check first
     const currentViews = await checkViewCountOffChain(videoId);
     if (currentViews === 0) {
         console.log(`Skipping deal #${dealId}: could not fetch view count.\n`);
         return;
     }
 
-    const milestones = await trustTube.getMilestones(dealId);
-
-    for (let i = 0; i < milestones.length; i++) {
-        const ms = milestones[i];
-        const isPaid = ms.isPaid;
-        const viewTarget = Number(ms.viewTarget);
-
-        if (isPaid) {
-            continue;
-        }
-
-        if (currentViews < viewTarget) {
-            console.log(`  Milestone ${i}: ${currentViews}/${viewTarget} views — not reached yet.\n`);
-            continue;
-        }
-
-        console.log(
-            `  Milestone ${i}: ${currentViews}/${viewTarget} views — target reached! Submitting FDC attestation...\n`
-        );
-
-        try {
-            // Build and submit FDC attestation for view count
-            const requestBody = prepareViewCountAttestation(videoId);
-            const proof = await submitAndRetrieveProof(requestBody);
-            const contractProof = buildContractProof(proof);
-
-            // Call claimMilestone on the TrustTube contract
-            const tx = await trustTube.claimMilestone(dealId, i, contractProof);
-            console.log(`  Milestone ${i} claimed! TX: ${tx.tx}\n`);
-        } catch (error) {
-            console.log(`  Error claiming milestone ${i} for deal #${dealId}:`, error, "\n");
-        }
-    }
-}
-
-// ─── Linear Processing ──────────────────────────────────────
-
-/**
- * For a Linear-mode deal, check if new views have accrued since the
- * last claim. If so, submit an FDC attestation and call claimLinear.
- */
-async function processLinearDeal(trustTube: any, deal: any) {
-    const dealId = Number(deal.id);
-    const videoId = deal.youtubeVideoId;
-
-    console.log(`Processing linear deal #${dealId} (video: ${videoId})...\n`);
-
-    // Quick off-chain check
-    const currentViews = await checkViewCountOffChain(videoId);
-    if (currentViews === 0) {
-        console.log(`Skipping deal #${dealId}: could not fetch view count.\n`);
-        return;
-    }
-
-    const linearConfig = await trustTube.getLinearConfig(dealId);
-    const lastClaimedViews = Number(linearConfig.lastClaimedViews);
-    const ratePerView = Number(linearConfig.ratePerView);
-    const totalCap = Number(linearConfig.totalCap);
-    const totalPaid = Number(deal.totalPaid);
-
-    if (currentViews <= lastClaimedViews) {
-        console.log(`  No new views since last claim (${currentViews} <= ${lastClaimedViews}).\n`);
-        return;
-    }
-
-    const newViews = currentViews - lastClaimedViews;
-    let potentialPayment = newViews * ratePerView;
-    const remainingCap = totalCap - totalPaid;
-
-    if (potentialPayment > remainingCap) {
-        potentialPayment = remainingCap;
-    }
-
-    if (potentialPayment === 0) {
-        console.log(`  No payment due (cap reached).\n`);
+    if (currentViews <= lastVerified) {
+        console.log(`  No new views since last update (${currentViews} <= ${lastVerified}).\n`);
         return;
     }
 
     console.log(
-        `  ${newViews} new views detected. Potential payment: ${potentialPayment}. Submitting FDC attestation...\n`
+        `  ${currentViews - lastVerified} new views detected (${lastVerified} → ${currentViews}). Submitting FDC attestation...\n`
     );
 
     try {
@@ -185,10 +112,10 @@ async function processLinearDeal(trustTube: any, deal: any) {
         const proof = await submitAndRetrieveProof(requestBody);
         const contractProof = buildContractProof(proof);
 
-        const tx = await trustTube.claimLinear(dealId, contractProof);
-        console.log(`  Linear claim submitted! TX: ${tx.tx}\n`);
+        const tx = await trustTube.updateViews(dealId, contractProof);
+        console.log(`  Views updated on-chain! TX: ${tx.tx}\n`);
     } catch (error) {
-        console.log(`  Error claiming linear payment for deal #${dealId}:`, error, "\n");
+        console.log(`  Error updating views for deal #${dealId}:`, error, "\n");
     }
 }
 
@@ -265,15 +192,9 @@ async function main() {
                 continue;
             }
 
-            // Step 2: Process each active deal based on payment mode
+            // Step 2: Update verified views for each active deal
             for (const deal of activeDeals) {
-                const paymentMode = Number(deal.paymentMode);
-
-                if (paymentMode === Number(PaymentMode.Milestone)) {
-                    await processMilestoneDeal(trustTube, deal);
-                } else if (paymentMode === Number(PaymentMode.Linear)) {
-                    await processLinearDeal(trustTube, deal);
-                }
+                await updateViewsForDeal(trustTube, deal);
             }
 
             // Step 3: Every 6th cycle, check etags for tampering

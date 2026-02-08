@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAccount, useReadContract } from "wagmi";
 import { TRUSTTUBE_ABI, TRUSTTUBE_ADDRESS } from "@/config/contracts";
 import { formatUnits } from "viem";
 import Link from "next/link";
+import { useRole } from "@/context/RoleContext";
+import { type DealApplication, getApplicationsByCreator } from "@/lib/applications";
 
 const STATUS_LABELS = [
     "Open",
@@ -23,6 +25,12 @@ const STATUS_COLORS: Record<number, string> = {
     3: "bg-violet-900/50 text-violet-300 border border-violet-800",
     4: "bg-zinc-800 text-zinc-400 border border-zinc-700",
     5: "bg-red-900/50 text-red-300 border border-red-800",
+};
+
+const APP_STATUS_COLORS: Record<string, string> = {
+    pending: "bg-amber-900/50 text-amber-300 border border-amber-800",
+    accepted: "bg-emerald-900/50 text-emerald-300 border border-emerald-800",
+    rejected: "bg-red-900/50 text-red-300 border border-red-800",
 };
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -227,9 +235,82 @@ function DealsList({
     );
 }
 
+function MyApplications({ address }: { address: string }) {
+    const [applications, setApplications] = useState<DealApplication[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        getApplicationsByCreator(address)
+            .then(setApplications)
+            .catch(() => {})
+            .finally(() => setIsLoading(false));
+    }, [address]);
+
+    const pending = applications.filter((a) => a.status === "pending");
+
+    if (isLoading) {
+        return (
+            <div className="space-y-3">
+                {[0, 1].map((i) => (
+                    <div
+                        key={i}
+                        className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 p-4"
+                    >
+                        <div className="h-4 w-40 rounded bg-zinc-800" />
+                        <div className="mt-2 h-3 w-28 rounded bg-zinc-800" />
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+    if (pending.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 py-12">
+                <p className="text-zinc-500">No pending applications</p>
+                <Link
+                    href="/marketplace"
+                    className="mt-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                    Browse the marketplace &rarr;
+                </Link>
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-3">
+            {pending.map((app) => (
+                <Link key={app.id} href={`/order/${app.contract_deal_id}`}>
+                    <div className="group rounded-xl border border-zinc-800 bg-zinc-900 p-4 transition-all hover:border-zinc-600 hover:bg-zinc-800/50 cursor-pointer">
+                        <div className="flex items-center justify-between">
+                            <h4 className="text-sm font-medium text-zinc-100">
+                                Order #{app.contract_deal_id}
+                            </h4>
+                            <span
+                                className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${APP_STATUS_COLORS[app.status]}`}
+                            >
+                                {app.status}
+                            </span>
+                        </div>
+                        {app.message && (
+                            <p className="mt-1.5 text-xs text-zinc-400 line-clamp-2">
+                                {app.message}
+                            </p>
+                        )}
+                        <p className="mt-1 text-xs text-zinc-600">
+                            Applied {new Date(app.created_at).toLocaleDateString()}
+                        </p>
+                    </div>
+                </Link>
+            ))}
+        </div>
+    );
+}
+
 export default function Dashboard() {
     const { address, isConnected } = useAccount();
-    const [activeTab, setActiveTab] = useState<"client" | "creator">("client");
+    const { role } = useRole();
 
     const { data: nextDealId, isLoading } = useReadContract({
         address: TRUSTTUBE_ADDRESS as `0x${string}`,
@@ -272,57 +353,50 @@ export default function Dashboard() {
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-zinc-50">Dashboard</h1>
                 <p className="mt-2 text-zinc-400">
-                    Manage your sponsorship deals
+                    {role === "creator"
+                        ? "Your creator deals and applications"
+                        : "Manage your sponsorship deals"}
                 </p>
             </div>
 
-            {/* Tabs */}
-            <div className="mb-6 flex gap-1 rounded-lg bg-zinc-900 p-1 border border-zinc-800 w-fit">
-                <button
-                    onClick={() => setActiveTab("client")}
-                    className={`rounded-md px-5 py-2.5 text-sm font-medium transition-all ${
-                        activeTab === "client"
-                            ? "bg-zinc-800 text-zinc-100 shadow-sm"
-                            : "text-zinc-400 hover:text-zinc-200"
-                    }`}
-                >
-                    As Client
-                </button>
-                <button
-                    onClick={() => setActiveTab("creator")}
-                    className={`rounded-md px-5 py-2.5 text-sm font-medium transition-all ${
-                        activeTab === "creator"
-                            ? "bg-zinc-800 text-zinc-100 shadow-sm"
-                            : "text-zinc-400 hover:text-zinc-200"
-                    }`}
-                >
-                    As Creator
-                </button>
-            </div>
-
-            {/* Content */}
-            {isLoading ? (
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {[0, 1, 2].map((i) => (
-                        <div
-                            key={i}
-                            className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 p-5"
-                        >
-                            <div className="mb-3 h-5 w-28 rounded bg-zinc-800" />
-                            <div className="space-y-2">
-                                <div className="h-4 w-40 rounded bg-zinc-800" />
-                                <div className="h-4 w-36 rounded bg-zinc-800" />
-                            </div>
-                        </div>
-                    ))}
+            {/* My Applications (creator only) */}
+            {role === "creator" && (
+                <div className="mb-8">
+                    <h2 className="mb-4 text-lg font-semibold text-zinc-100">
+                        My Applications
+                    </h2>
+                    <MyApplications address={address} />
                 </div>
-            ) : (
-                <DealsList
-                    role={activeTab}
-                    userAddress={address}
-                    dealCount={dealCount}
-                />
             )}
+
+            {/* Deals */}
+            <div>
+                <h2 className="mb-4 text-lg font-semibold text-zinc-100">
+                    {role === "client" ? "My Orders" : "Accepted Deals"}
+                </h2>
+                {isLoading ? (
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {[0, 1, 2].map((i) => (
+                            <div
+                                key={i}
+                                className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 p-5"
+                            >
+                                <div className="mb-3 h-5 w-28 rounded bg-zinc-800" />
+                                <div className="space-y-2">
+                                    <div className="h-4 w-40 rounded bg-zinc-800" />
+                                    <div className="h-4 w-36 rounded bg-zinc-800" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <DealsList
+                        role={role}
+                        userAddress={address}
+                        dealCount={dealCount}
+                    />
+                )}
+            </div>
         </div>
     );
 }

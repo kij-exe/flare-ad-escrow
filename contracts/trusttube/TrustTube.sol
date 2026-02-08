@@ -55,6 +55,7 @@ contract TrustTube {
         uint256 videoDeadline; // timestamp by which video must be submitted
         uint256 totalDeposited;
         uint256 totalPaid;
+        uint256 lastVerifiedViews; // latest FDC-verified view count (updated by keeper)
     }
 
     // ─── FDC Response DTOs ──────────────────────────────────
@@ -82,6 +83,7 @@ contract TrustTube {
     event CreatorAccepted(uint256 indexed dealId, address indexed creator);
     event VideoSubmitted(uint256 indexed dealId, string videoId);
     event VideoApproved(uint256 indexed dealId, uint256 totalDeposited);
+    event ViewsUpdated(uint256 indexed dealId, uint256 viewCount);
     event MilestoneClaimed(uint256 indexed dealId, uint256 milestoneIndex, uint256 payout, uint256 viewCount);
     event LinearClaimed(uint256 indexed dealId, uint256 payout, uint256 viewCount);
     event TamperingReported(uint256 indexed dealId, uint256 fundsReturned);
@@ -245,53 +247,51 @@ contract TrustTube {
         return ContractRegistry.getFdcVerification().verifyWeb2Json(proof);
     }
 
-    /// @notice Claim a milestone payout with FDC proof of view count
+    /// @notice Keeper updates the verified view count via FDC proof (no payout)
+    function updateViews(uint256 dealId, IWeb2Json.Proof calldata proof) external inStatus(dealId, DealStatus.Active) {
+        Deal storage deal = deals[dealId];
+
+        if (!_verifyProof(proof)) revert InvalidProof();
+
+        ViewCountDTO memory dto = abi.decode(proof.data.responseBody.abiEncodedData, (ViewCountDTO));
+
+        if (keccak256(bytes(dto.videoId)) != keccak256(bytes(deal.youtubeVideoId))) revert VideoIdMismatch();
+
+        // Only update if view count increased
+        if (dto.viewCount > deal.lastVerifiedViews) {
+            deal.lastVerifiedViews = dto.viewCount;
+            emit ViewsUpdated(dealId, dto.viewCount);
+        }
+    }
+
+    /// @notice Creator claims a milestone payout (views must already be verified by keeper)
     function claimMilestone(
         uint256 dealId,
-        uint256 milestoneIndex,
-        IWeb2Json.Proof calldata proof
-    ) external inStatus(dealId, DealStatus.Active) {
+        uint256 milestoneIndex
+    ) external onlyCreator(dealId) inStatus(dealId, DealStatus.Active) {
         Deal storage deal = deals[dealId];
         MilestoneConfig storage ms = milestones[dealId][milestoneIndex];
 
         if (ms.isPaid) revert MilestoneAlreadyPaid();
-        if (!_verifyProof(proof)) revert InvalidProof();
+        if (deal.lastVerifiedViews < ms.viewTarget) revert MilestoneNotReached();
 
-        // Decode view count from proof
-        ViewCountDTO memory dto = abi.decode(proof.data.responseBody.abiEncodedData, (ViewCountDTO));
-
-        // Verify video ID matches
-        if (keccak256(bytes(dto.videoId)) != keccak256(bytes(deal.youtubeVideoId))) revert VideoIdMismatch();
-
-        // Check milestone target reached
-        if (dto.viewCount < ms.viewTarget) revert MilestoneNotReached();
-
-        // Pay out
         ms.isPaid = true;
         deal.totalPaid += ms.payoutAmount;
         IERC20(deal.stablecoin).safeTransfer(deal.creator, ms.payoutAmount);
 
-        emit MilestoneClaimed(dealId, milestoneIndex, ms.payoutAmount, dto.viewCount);
+        emit MilestoneClaimed(dealId, milestoneIndex, ms.payoutAmount, deal.lastVerifiedViews);
 
-        // Check if all milestones are paid
         _checkCompletion(dealId);
     }
 
-    /// @notice Claim linear payment with FDC proof of view count
-    function claimLinear(uint256 dealId, IWeb2Json.Proof calldata proof) external inStatus(dealId, DealStatus.Active) {
+    /// @notice Creator claims linear payment (views must already be verified by keeper)
+    function claimLinear(uint256 dealId) external onlyCreator(dealId) inStatus(dealId, DealStatus.Active) {
         Deal storage deal = deals[dealId];
         LinearConfig storage lc = linearConfigs[dealId];
 
-        if (!_verifyProof(proof)) revert InvalidProof();
+        if (deal.lastVerifiedViews <= lc.lastClaimedViews) revert NoPaymentDue();
 
-        ViewCountDTO memory dto = abi.decode(proof.data.responseBody.abiEncodedData, (ViewCountDTO));
-
-        if (keccak256(bytes(dto.videoId)) != keccak256(bytes(deal.youtubeVideoId))) revert VideoIdMismatch();
-
-        // Calculate payment for new views
-        if (dto.viewCount <= lc.lastClaimedViews) revert NoPaymentDue();
-
-        uint256 newViews = dto.viewCount - lc.lastClaimedViews;
+        uint256 newViews = deal.lastVerifiedViews - lc.lastClaimedViews;
         uint256 payment = newViews * lc.ratePerView;
         uint256 remainingCap = lc.totalCap - deal.totalPaid;
 
@@ -299,13 +299,12 @@ contract TrustTube {
             payment = remainingCap;
         }
 
-        lc.lastClaimedViews = dto.viewCount;
+        lc.lastClaimedViews = deal.lastVerifiedViews;
         deal.totalPaid += payment;
         IERC20(deal.stablecoin).safeTransfer(deal.creator, payment);
 
-        emit LinearClaimed(dealId, payment, dto.viewCount);
+        emit LinearClaimed(dealId, payment, deal.lastVerifiedViews);
 
-        // Check if cap reached
         if (deal.totalPaid >= lc.totalCap) {
             deal.status = DealStatus.Completed;
             emit DealCompleted(dealId);

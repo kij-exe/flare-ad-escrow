@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useRole } from "@/context/RoleContext";
 
 export function Navbar() {
+    const { role, setRole } = useRole();
+
     return (
         <nav className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -24,12 +27,14 @@ export function Navbar() {
                             >
                                 Marketplace
                             </Link>
-                            <Link
-                                href="/create-order"
-                                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
-                            >
-                                Create Order
-                            </Link>
+                            {role === "client" && (
+                                <Link
+                                    href="/create-order"
+                                    className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                                >
+                                    Create Order
+                                </Link>
+                            )}
                             <Link
                                 href="/dashboard"
                                 className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
@@ -44,11 +49,35 @@ export function Navbar() {
                             </Link>
                         </div>
                     </div>
-                    <ConnectButton
-                        showBalance={false}
-                        chainStatus="icon"
-                        accountStatus="address"
-                    />
+                    <div className="flex items-center gap-3">
+                        <div className="flex gap-0.5 rounded-lg bg-zinc-900 p-0.5 border border-zinc-800">
+                            <button
+                                onClick={() => setRole("client")}
+                                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                                    role === "client"
+                                        ? "bg-zinc-800 text-zinc-100 shadow-sm"
+                                        : "text-zinc-400 hover:text-zinc-200"
+                                }`}
+                            >
+                                Client
+                            </button>
+                            <button
+                                onClick={() => setRole("creator")}
+                                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                                    role === "creator"
+                                        ? "bg-zinc-800 text-zinc-100 shadow-sm"
+                                        : "text-zinc-400 hover:text-zinc-200"
+                                }`}
+                            >
+                                Creator
+                            </button>
+                        </div>
+                        <ConnectButton
+                            showBalance={false}
+                            chainStatus="icon"
+                            accountStatus="address"
+                        />
+                    </div>
                 </div>
             </div>
         </nav>

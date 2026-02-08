@@ -1,9 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useReadContract } from "wagmi";
 import { TRUSTTUBE_ABI, TRUSTTUBE_ADDRESS } from "@/config/contracts";
 import Link from "next/link";
 import { formatUnits } from "viem";
+import { useRole } from "@/context/RoleContext";
+import { getApplicationCounts } from "@/lib/applications";
 
 const STATUS_LABELS = [
     "Open",
@@ -24,7 +27,8 @@ const STATUS_COLORS: Record<number, string> = {
     5: "bg-red-900/50 text-red-300 border border-red-800",
 };
 
-function DealCard({ dealId }: { dealId: number }) {
+function DealCard({ dealId, appCount }: { dealId: number; appCount?: number }) {
+    const { role } = useRole();
     const { data: deal } = useReadContract({
         address: TRUSTTUBE_ADDRESS as `0x${string}`,
         abi: TRUSTTUBE_ABI,
@@ -120,6 +124,14 @@ function DealCard({ dealId }: { dealId: number }) {
                             </span>
                         </div>
                     )}
+                    {role === "creator" && status === 0 && appCount !== undefined && appCount > 0 && (
+                        <div className="flex items-center justify-between">
+                            <span className="text-zinc-500">Applications</span>
+                            <span className="rounded-full bg-blue-900/50 border border-blue-800 px-2.5 py-0.5 text-xs font-medium text-blue-300">
+                                {appCount}
+                            </span>
+                        </div>
+                    )}
                 </div>
                 <div className="mt-4 pt-4 border-t border-zinc-800">
                     <span className="text-xs text-zinc-500 group-hover:text-blue-400 transition-colors">
@@ -132,6 +144,9 @@ function DealCard({ dealId }: { dealId: number }) {
 }
 
 export default function Marketplace() {
+    const { role } = useRole();
+    const [appCounts, setAppCounts] = useState<Record<number, number>>({});
+
     const { data: nextDealId, isLoading } = useReadContract({
         address: TRUSTTUBE_ADDRESS as `0x${string}`,
         abi: TRUSTTUBE_ABI,
@@ -143,6 +158,13 @@ export default function Marketplace() {
 
     const dealCount = nextDealId ? Number(nextDealId) : 0;
 
+    useEffect(() => {
+        if (role === "creator" && dealCount > 0) {
+            const dealIds = Array.from({ length: dealCount }, (_, i) => i);
+            getApplicationCounts(dealIds).then(setAppCounts).catch(() => {});
+        }
+    }, [role, dealCount]);
+
     return (
         <div>
             <div className="mb-8 flex items-end justify-between">
@@ -151,16 +173,19 @@ export default function Marketplace() {
                         Marketplace
                     </h1>
                     <p className="mt-2 text-zinc-400">
-                        Browse open sponsorship orders from clients looking for
-                        YouTube creators
+                        {role === "creator"
+                            ? "Find sponsorship opportunities from clients"
+                            : "Browse open sponsorship orders from clients looking for YouTube creators"}
                     </p>
                 </div>
-                <Link
-                    href="/create-order"
-                    className="hidden sm:inline-flex h-10 items-center justify-center rounded-lg bg-blue-600 px-5 text-sm font-medium text-white transition-colors hover:bg-blue-500"
-                >
-                    + New Order
-                </Link>
+                {role === "client" && (
+                    <Link
+                        href="/create-order"
+                        className="hidden sm:inline-flex h-10 items-center justify-center rounded-lg bg-blue-600 px-5 text-sm font-medium text-white transition-colors hover:bg-blue-500"
+                    >
+                        + New Order
+                    </Link>
+                )}
             </div>
 
             {isLoading ? (
@@ -199,19 +224,23 @@ export default function Marketplace() {
                         No orders yet
                     </p>
                     <p className="mt-1 text-sm text-zinc-500">
-                        Be the first to create a sponsorship order
+                        {role === "creator"
+                            ? "No sponsorship opportunities available yet"
+                            : "Be the first to create a sponsorship order"}
                     </p>
-                    <Link
-                        href="/create-order"
-                        className="mt-4 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
-                    >
-                        Create the first order &rarr;
-                    </Link>
+                    {role === "client" && (
+                        <Link
+                            href="/create-order"
+                            className="mt-4 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                        >
+                            Create the first order &rarr;
+                        </Link>
+                    )}
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {Array.from({ length: dealCount }, (_, i) => (
-                        <DealCard key={i} dealId={i} />
+                        <DealCard key={i} dealId={i} appCount={appCounts[i]} />
                     ))}
                 </div>
             )}
