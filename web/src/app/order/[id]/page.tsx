@@ -8,7 +8,7 @@ import {
     useWriteContract,
     useWaitForTransactionReceipt,
 } from "wagmi";
-import { formatUnits, keccak256, toHex } from "viem";
+import { formatUnits, keccak256, toHex } from "viem/utils";
 import {
     TRUSTTUBE_ABI,
     TRUSTTUBE_ADDRESS,
@@ -69,12 +69,14 @@ export default function OrderDetail() {
     const [showManualInput, setShowManualInput] = useState(false);
     const [showManualVideoInput, setShowManualVideoInput] = useState(false);
 
-    const { data: deal, refetch: refetchDeal } = useReadContract({
+    const { data: deal, refetch: refetchDeal, error: dealError, isLoading: dealLoading } = useReadContract({
         address: TRUSTTUBE_ADDRESS as `0x${string}`,
         abi: TRUSTTUBE_ABI,
         functionName: "getDeal",
         args: [BigInt(dealId)],
     });
+
+    console.log("[OrderDetail] dealId:", dealId, "deal:", deal, "error:", dealError, "loading:", dealLoading);
 
     const { data: milestones, refetch: refetchMilestones } = useReadContract({
         address: TRUSTTUBE_ADDRESS as `0x${string}`,
@@ -484,17 +486,6 @@ export default function OrderDetail() {
                     )}
                 </div>
 
-                {/* Your role indicator */}
-                {address && (isClient || isCreator) && (
-                    <div className="mt-[1rem] rounded-[6px] bg-[#f6f6f6] px-[1rem] py-[0.5rem]">
-                        <span className="text-[0.7rem] text-[#a0a0a0]">
-                            Your role:{" "}
-                        </span>
-                        <span className="text-[0.7rem] font-bold text-[#E62058]">
-                            {isClient ? "Client" : "Creator"}
-                        </span>
-                    </div>
-                )}
             </div>
 
             {/* Milestones */}

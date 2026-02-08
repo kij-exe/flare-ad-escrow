@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useReadContract } from "wagmi";
 import { TRUSTTUBE_ABI, TRUSTTUBE_ADDRESS } from "@/config/contracts";
 import Link from "next/link";
-import { formatUnits } from "viem";
+import { formatUnits } from "viem/utils";
 import { useRole } from "@/context/RoleContext";
 import { getApplicationCounts } from "@/lib/applications";
 

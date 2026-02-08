@@ -31,9 +31,7 @@ export function YouTubeUpload({ dealId, onUploadComplete }: YouTubeUploadProps) 
     const [title, setTitle] = useState(
         `TrustTube Sponsorship - Order #${dealId}`
     );
-    const [description, setDescription] = useState(
-        "Sponsored content via TrustTube"
-    );
+    const [description, setDescription] = useState("");
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
     const [result, setResult] = useState<{

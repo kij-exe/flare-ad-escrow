@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { parseUnits } from "viem";
+import { parseUnits } from "viem/utils";
 import { TRUSTTUBE_ABI, TRUSTTUBE_ADDRESS, MOCK_USDC_ADDRESS } from "@/config/contracts";
 import toast from "react-hot-toast";
 

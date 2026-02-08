@@ -1,4 +1,4 @@
-import { defineChain } from "viem";
+import { defineChain } from "viem/utils";
 
 export const coston2 = defineChain({
     id: 114,

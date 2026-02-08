@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAccount, useReadContract } from "wagmi";
 import { TRUSTTUBE_ABI, TRUSTTUBE_ADDRESS } from "@/config/contracts";
-import { formatUnits } from "viem";
+import { formatUnits } from "viem/utils";
 import Link from "next/link";
 import { useRole } from "@/context/RoleContext";
 import { type DealApplication, getApplicationsByCreator } from "@/lib/applications";
